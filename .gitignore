@@ -59,3 +59,10 @@ typings/
 
 # next.js build output
 .next
+
+# Python virtual environment files
+venv/
+
+# compiled Python files
+*.pyc
+__pycache__
