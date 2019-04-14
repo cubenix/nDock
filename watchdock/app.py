@@ -1,10 +1,13 @@
-from flask import Flask
+from flask import Flask, render_template
 app = Flask(__name__)
 
 
 @app.route('/')
+@app.route('/index')
+@app.route('/home')
+@app.route('/index.html')
 def index():
-    return '<h1>Hello from WatchDock API Server</h1>'
+    return render_template("index.html", title="Home")
 
 
 if __name__ == '__main__':
