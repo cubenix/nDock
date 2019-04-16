@@ -3,7 +3,7 @@ from docker import DockerClient
 import constants
 
 
-def get_containers_for_hosts(hosts):
+def get_containers(hosts):
     """Returns a dictionary with hostname and the number of containers in running state.
 
     :param hosts: list of Docker hosts defined in config.json
