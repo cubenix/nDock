@@ -7,6 +7,30 @@
         <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
     </div>
 
+    <!-- Docker Host Cards -->
+    <div class="row">
+        <script>
+          var background_class = JSON.parse('{{ background_class|tojson }}');
+          var countBkg = 0;
+        </script>
+
+        {% for host in host_details %}  
+          <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card text-white shadow">
+              <div class="card-body"  id="{{ host.name }}-card">
+                {{ host.name }}
+                <div class="text-white small">{{ host.IP }}</div>
+              </div>
+            </div>
+          </div>
+          <script>
+            var hostCard = document.getElementById("{{ host.name }}-card");
+            hostCard.classList.add(background_class[countBkg]);
+            countBkg++;
+          </script>
+        {% endfor %}   
+    </div>
+    
     <!-- Content Row -->
     <div class="row">
         <!-- Pie Chart -->
@@ -22,7 +46,7 @@
             <div class="card-body">
               <script>
                 var color_hosts = JSON.parse('{{ color_hosts|tojson }}');
-                var count = 0;
+                var colorCount = 0;
               </script>
 
               <div class="chart-pie pt-4 pb-2">
@@ -33,9 +57,9 @@
                   <span class="mr-2" id="{{host}}-mr">
                     <i class="fas fa-circle"></i> {{ host }}
                     <script>
-                      var e = document.getElementById("{{ host }}-mr");
-                      e.classList.add(color_hosts[count]);
-                      count++;
+                      var hostMr = document.getElementById("{{ host }}-mr");
+                      hostMr.classList.add(color_hosts[colorCount]);
+                      colorCount++;
                     </script>
                   </span>
                 {% endfor %}

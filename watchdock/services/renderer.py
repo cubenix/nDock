@@ -12,7 +12,9 @@ def render_dashboard(config_manager):
 
     return render_template(
         "index.html", title="Dashboard",
+        host_details=hosts,
         hosts=list(host_containers.keys()),
         containers=list(host_containers.values()),
         color_hosts=constants.COLOR_HOSTS,
-        color_background=constants.COLOR_BACKGROUND)
+        color_background=constants.COLOR_BACKGROUND,
+        background_class=constants.BACKGROUND_CLASS)

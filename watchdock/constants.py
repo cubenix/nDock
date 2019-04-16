@@ -22,3 +22,12 @@ COLOR_BACKGROUND = [
     "#e74a3b",
     "#858796",
 ]
+
+BACKGROUND_CLASS = [
+    "bg-primary",
+    "bg-success",
+    "bg-info",
+    "bg-warning",
+    "bg-danger",
+    "bg-secondary"
+]
