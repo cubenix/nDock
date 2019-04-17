@@ -1,5 +1,6 @@
 """ Helper to work with a Docker host. """
 import docker
+import json
 from models.host import Host
 import constants
 
@@ -24,8 +25,34 @@ def get_containers(hosts):
 def get_stats():
     host = Host(name="mglab-srv4", IP="172.27.127.134")
     client = __create_low_level_client(host)
+    results = []
     for container in client.containers():
-        print(next(client.stats(resource_id=container['Id'], decode=True)))
+        stats = client.stats(container['Id'], stream=False)
+        result = {}
+        result["Container"] = container["Names"][0].strip('/')
+        result["Usage"] = "{0:.3f}".format(__calculate_usage(stats))
+        results.append(result)
+    return json.dumps(results)
+
+
+def __calculate_usage(stats):
+    # get required readings
+    cpu_stats = stats["cpu_stats"]["cpu_usage"]["total_usage"]
+    precpu_stats = stats["precpu_stats"]["cpu_usage"]["total_usage"]
+    system_cpu_stats = stats["cpu_stats"]["system_cpu_usage"]
+    system_precpu_stats = stats["precpu_stats"]["system_cpu_usage"]
+    cpu_count = len(stats["precpu_stats"]["cpu_usage"]["percpu_usage"])
+
+    # calculate the change for cpu usage of the container in between readings
+    cpu_delta = cpu_stats - precpu_stats
+
+    # calculate the change for the entire system between readings
+    system_delta = system_cpu_stats - system_precpu_stats
+
+    cpu_usage = 0.0
+    if system_delta > 0 and cpu_delta > 0:
+        cpu_usage = (cpu_delta / system_delta) * cpu_count * 100
+    return cpu_usage
 
 
 def __create_client(host):
@@ -33,5 +60,4 @@ def __create_client(host):
 
 
 def __create_low_level_client(host):
-    return docker.api.client.APIClient(
-        f"tcp://{host.IP}:{constants.DEFAULT_PORT}")
+    return docker.APIClient(f"tcp://{host.IP}:{constants.DEFAULT_PORT}")
