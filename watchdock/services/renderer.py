@@ -24,7 +24,7 @@ def render_stats(config_manager):
     stats = [
         {
             "name": "container-one",
-            "usage": [12, 23, 14, 35, 27, 50, 65, 85, 123, 63.6, 56, 78]
+            "usage": [12, 23, 14, 35, 27, 50, 65, 85, 123, 63.6, 156, 78]
         },
         {
             "name": "container-two",
