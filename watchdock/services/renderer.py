@@ -18,3 +18,17 @@ def render_dashboard(config_manager):
         color_hosts=constants.COLOR_HOSTS,
         color_background=constants.COLOR_BACKGROUND,
         background_class=constants.BACKGROUND_CLASS)
+
+
+def render_stats(config_manager):
+    stats = [
+        {
+            "name": "container-one",
+            "usage": [12, 23, 14, 35, 27, 50, 65, 85, 123, 63.6, 56, 78]
+        },
+        {
+            "name": "container-two",
+            "usage": [5, 35, 10, 25, 47, 36, 41, 65, 51, 73, 91, 132]
+        }
+    ]
+    return render_template("stats.html", stats=stats)

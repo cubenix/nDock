@@ -1,7 +1,6 @@
 from flask import Flask
 from config_manager import ConfigManager
 import services.renderer as renderer
-import services.host as host
 
 
 app = Flask(__name__)
@@ -18,8 +17,7 @@ def index():
 
 @app.route('/stats')
 def stats():
-    host.get_stats()
-    return '<h1>Docker stats</h1>'
+    return renderer.render_stats(config_manager)
 
 
 if __name__ == '__main__':
