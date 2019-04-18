@@ -1,7 +1,5 @@
 """ Helper to work with a Docker host. """
 import docker
-import json
-from models.host import Host
 import constants
 
 
@@ -22,17 +20,20 @@ def get_containers(hosts):
     return host_containers
 
 
-def get_stats():
-    host = Host(name="mglab-srv4", IP="172.27.127.134")
-    client = __create_low_level_client(host)
-    results = []
-    for container in client.containers():
-        stats = client.stats(container['Id'], stream=False)
-        result = {}
-        result["Container"] = container["Names"][0].strip('/')
-        result["Usage"] = "{0:.3f}".format(__calculate_usage(stats))
-        results.append(result)
-    return json.dumps(results)
+def get_stats(hosts):
+    # host = Host(name="mglab-srv4", IP="172.27.127.134")
+    final_stats = {}
+    for host in hosts:
+        client = __create_low_level_client(host)
+        results = []
+        for container in client.containers():
+            stats = client.stats(container['Id'], stream=False)
+            result = {}
+            result["Container"] = container["Names"][0].strip('/')
+            result["Usage"] = "{0:.3f}".format(__calculate_usage(stats))
+            results.append(result)
+        final_stats[host.name] = results
+    return final_stats
 
 
 def __calculate_usage(stats):

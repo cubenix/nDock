@@ -6,8 +6,7 @@ import services.host as host
 import constants
 
 
-def render_dashboard(config_manager):
-    hosts = config_manager.get_hosts()
+def render_dashboard(hosts):
     host_containers = host.get_containers(hosts)
 
     return render_template(
@@ -20,7 +19,7 @@ def render_dashboard(config_manager):
         background_class=constants.BACKGROUND_CLASS)
 
 
-def render_stats(config_manager):
+def render_stats(hosts):
     stats = [
         {
             "name": "container-one",
@@ -31,4 +30,5 @@ def render_stats(config_manager):
             "usage": [5, 35, 10, 25, 47, 36, 41, 65, 51, 73, 91, 132]
         }
     ]
+    print(host.get_stats(hosts))
     return render_template("stats.html", stats=stats)
