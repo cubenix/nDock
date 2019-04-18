@@ -4,7 +4,7 @@ import services.renderer as renderer
 
 
 app = Flask(__name__)
-config_manager = ConfigManager()
+hosts = ConfigManager().get_hosts()
 
 
 @app.route('/')
@@ -12,12 +12,12 @@ config_manager = ConfigManager()
 @app.route('/home')
 @app.route('/index.html')
 def index():
-    return renderer.render_dashboard(config_manager)
+    return renderer.render_dashboard(hosts)
 
 
 @app.route('/stats')
 def stats():
-    return renderer.render_stats(config_manager)
+    return renderer.render_stats(hosts)
 
 
 if __name__ == '__main__':
