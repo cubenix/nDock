@@ -2,6 +2,14 @@
 
 {% block content %}     
 
+    <style>
+      a:link, a:visited {
+        text-decoration: none;
+        color: white; 
+        cursor: pointer;
+      }
+    </style>
+
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
@@ -15,17 +23,21 @@
         </script>
 
         {% for host in host_details %}  
-          <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card text-white shadow">
-              <div class="card-body"  id="{{ host.name }}-card">
-                 {{ host.name }} 
-                <div>
-                  <i class="fa fa-desktop fa-lg" style="float: right; margin-right: 5px; margin-top: -10px;" aria-hidden="true"></i>
-                </div>
-                <div class="text-white small">{{ host.IP }}</div>
+          
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card text-white shadow">
+                <a href="/stats">
+                  <div class="card-body"  id="{{ host.name }}-card">
+                     {{ host.name }} 
+                      <div>
+                        <i class="fa fa-desktop fa-lg" style="float: right; margin-right: 5px; margin-top: -10px;" aria-hidden="true"></i>
+                      </div>
+                      <div class="text-white small">{{ host.IP }}</div>
+                  </div>
+                </a>
               </div>
             </div>
-          </div>
+          
           <script>
             var hostCard = document.getElementById("{{ host.name }}-card");
             hostCard.classList.add(background_class[countBkg]);
