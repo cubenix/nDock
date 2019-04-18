@@ -1,5 +1,6 @@
 """ Helper to work with a Docker host. """
 import docker
+import json
 import constants
 
 
@@ -29,11 +30,11 @@ def get_stats(hosts):
         for container in client.containers():
             stats = client.stats(container['Id'], stream=False)
             result = {}
-            result["Container"] = container["Names"][0].strip('/')
-            result["Usage"] = "{0:.3f}".format(__calculate_usage(stats))
+            result["container"] = container["Names"][0].strip('/')
+            result["usage"] = "{0:.3f}".format(__calculate_usage(stats))
             results.append(result)
         final_stats[host.name] = results
-    return final_stats
+    return json.dumps(final_stats)
 
 
 def __calculate_usage(stats):

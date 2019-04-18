@@ -1,9 +1,10 @@
 """
 Module to handle requests and render required template.
 """
-from flask import render_template
+from quart import render_template
 import services.host as host
 import constants
+# import asyncio
 
 
 def render_dashboard(hosts):
@@ -19,7 +20,7 @@ def render_dashboard(hosts):
         background_class=constants.BACKGROUND_CLASS)
 
 
-def render_stats(hosts):
+def render_stats(host):
     stats = [
         {
             "name": "container-one",
@@ -30,5 +31,14 @@ def render_stats(hosts):
             "usage": [5, 35, 10, 25, 47, 36, 41, 65, 51, 73, 91, 132]
         }
     ]
-    print(host.get_stats(hosts))
     return render_template("stats.html", stats=stats)
+
+
+# def render_stats(host):
+#     return render_template(
+#         "stats.html",
+#         color_bkg=constants.COLOR_BACKGROUND)
+# hostname=hostname)
+
+def get_stats(hosts):
+    return host.get_stats(hosts)

@@ -1,9 +1,10 @@
-from flask import Flask
+from quart import Quart
+# import asyncio
 from config_manager import ConfigManager
 import services.renderer as renderer
 
 
-app = Flask(__name__)
+app = Quart(__name__)
 hosts = ConfigManager().get_hosts()
 
 
@@ -18,6 +19,11 @@ def index():
 @app.route('/stats')
 def stats():
     return renderer.render_stats(hosts)
+
+
+@app.route('/get_stats')
+def get_stats():
+    return renderer.get_stats(hosts[:1])
 
 
 if __name__ == '__main__':

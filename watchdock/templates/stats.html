@@ -43,46 +43,31 @@
         Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
         Chart.defaults.global.defaultFontColor = '#858796';
 
+        var dataset = {
+            label: "{{ stats[0]['name'] }}",
+            data: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+            lineTension: 0.2,
+            backgroundColor: "#4e73df",
+            borderColor: "#4e73df",
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderWidth: 1.5,
+            borderJoinStyle: 'miter',
+            pointRadius: 0,
+            pointHitRadius: 10,
+            pointHoverBackgroundColor: "#4e73df",
+            pointHoverBorderColor: "#4e73df",
+            pointHoverBorderWidth: 2,    
+            fill:false,
+        };
+
         var ctx = document.getElementById("docker-stats-chart");
         var data = {
-            labels: ["", "", "", "", "", "", "", "", "", "", "", ""],
-            datasets: [{
-                label: "{{ stats[0]['name'] }}",
-                data: JSON.parse("{{ stats[0]['usage'] }}"),
-                lineTension: 0.2,
-                backgroundColor: "#4e73df",
-                borderColor: "#4e73df",
-                borderCapStyle: 'butt',
-                borderDash: [],
-                borderDashOffset: 0.0,
-                borderWidth: 1.5,
-                borderJoinStyle: 'miter',
-                pointRadius: 0,
-                pointHitRadius: 10,
-                pointHoverBackgroundColor: "#4e73df",
-                pointHoverBorderColor: "#4e73df",
-                pointHoverBorderWidth: 2,    
-                fill:false,
-            },
-            {
-                label: "{{ stats[1]['name'] }}",
-                data: JSON.parse("{{ stats[1]['usage'] }}"),
-                lineTension: 0.2,
-                backgroundColor: "#1cc88a",
-                borderColor: "#1cc88a",
-                borderCapStyle: 'butt',
-                borderDash: [],
-                borderDashOffset: 0.0,
-                borderWidth: 1.5,
-                borderJoinStyle: 'miter',
-                pointRadius: 0,
-                pointHitRadius: 10,
-                pointHoverBackgroundColor: "#1cc88a",
-                pointHoverBorderColor: "#1cc88a",
-                pointHoverBorderWidth: 2,    
-                fill:false,
-            }],
+            labels: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+            datasets: [dataset],
         };
+
         var options = {
             showLines: true,
             animation: false,
@@ -119,7 +104,7 @@
                         // maxTicksLimit: 50,
                         // max: 1000,
                         min: 0,
-                        stepSize: 50,
+                        stepSize: 10,
                         padding: 10
                     },
                     gridLines: {
@@ -155,12 +140,26 @@
             }
         };
 
+        var usage = 0;
         function addData() {
             statsLineChart.data.datasets[0].data.shift();
-            statsLineChart.data.datasets[1].data.shift();
+            // statsLineChart.data.datasets[1].data.shift();
             statsLineChart.data.labels.shift();
-            statsLineChart.data.datasets[0].data.push(Math.floor((Math.random() * 100) + 1));
-            statsLineChart.data.datasets[1 ].data.push(Math.floor((Math.random() * 100) + 1));
+            
+            $.ajax({
+                url: '/get_stats',
+                type: 'GET',
+                success: function (res) {
+                    let respose = JSON.parse(res)
+                    usage = parseFloat(respose["mg-test2"][0]["usage"]);
+                },
+                error: function (res) {
+                    console.log(res);
+                }
+            });
+
+            statsLineChart.data.datasets[0].data.push(usage);
+            console.log(statsLineChart.data.datasets[0].data);
             var ctime = new Date();
             var csecs = moment(ctime).format("s");
             if (csecs % 5 === 0) {
@@ -172,7 +171,7 @@
 
             statsLineChart.update();
         }
-        
+
         var statsLineChart = new Chart(ctx, {
             type: 'line',
             data: data,
