@@ -1,10 +1,9 @@
-from quart import Quart
-# import asyncio
+from flask import Flask
 from config_manager import ConfigManager
 import services.renderer as renderer
 
 
-app = Quart(__name__)
+app = Flask(__name__)
 hosts = ConfigManager().get_hosts()
 
 
