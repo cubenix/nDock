@@ -161,23 +161,17 @@
                 url: '/get_stats',
                 type: 'GET',
                 success: function (res) {
-                    let response = JSON.parse(res)
-                    // console.log(response);
-                    
+                    let response = JSON.parse(res);                    
                     for(i=0; i < response.length; i++) {                        
                         usage = parseFloat(response[i]['usage']);
                         statsLineChart.data.datasets[i].data.push(usage);
-                        console.log(i + ": " + usage);
                     }
-                    //usage = parseFloat(respose["docker-node-01"][0]["usage"]);
                 },
                 error: function (res) {
                     console.log(res);
                 }
             });
 
-            statsLineChart.data.datasets[0].data.push(23);
-            // console.log(statsLineChart.data.datasets[0].data);
             var ctime = new Date();
             var csecs = moment(ctime).format("s");
             if (csecs % 5 === 0) {
@@ -198,7 +192,7 @@
 
         window.onload = function() {
             
-            setInterval('addData()', 5000);
+            setInterval('addData()', 3000);
         };
                 
     </script>
