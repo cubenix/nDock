@@ -21,20 +21,37 @@ def get_containers(hosts):
     return host_containers
 
 
-def get_stats(hosts):
-    # host = Host(name="mglab-srv4", IP="172.27.127.134")
-    final_stats = {}
-    for host in hosts:
-        client = __create_low_level_client(host)
-        results = []
-        for container in client.containers():
-            stats = client.stats(container['Id'], stream=False)
-            result = {}
-            result["container"] = container["Names"][0].strip('/')
-            result["usage"] = "{0:.3f}".format(__calculate_usage(stats))
-            results.append(result)
-        final_stats[host.name] = results
-    return json.dumps(final_stats)
+def get_host_containers(host):
+    """
+    Returns
+    [
+        {
+            "name": "container-name",
+            "color_code": "color-code-for-container"
+        }
+    ]
+    """
+    client = __create_client(host)
+    container_list = client.containers.list()
+    containers = []
+    for index in range(len(container_list)):
+        containers.append({
+            "name": container_list[index].name,
+            "color_code": constants.COLOR_BACKGROUND[index]
+        })
+    return containers
+
+
+def get_stats(host):
+    client = __create_low_level_client(host)
+    results = []
+    for container in client.containers():
+        stats = client.stats(container['Id'], stream=False)
+        result = {}
+        result["container"] = container["Names"][0].strip('/')
+        result["usage"] = "{0:.3f}".format(__calculate_usage(stats))
+        results.append(result)
+    return json.dumps(results)
 
 
 def __calculate_usage(stats):
@@ -58,8 +75,10 @@ def __calculate_usage(stats):
 
 
 def __create_client(host):
+    # return docker.from_env()
     return docker.DockerClient(f"tcp://{host.IP}:{constants.DEFAULT_PORT}")
 
 
 def __create_low_level_client(host):
+    # return docker.APIClient()
     return docker.APIClient(f"tcp://{host.IP}:{constants.DEFAULT_PORT}")

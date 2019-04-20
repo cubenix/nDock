@@ -19,26 +19,12 @@ def render_dashboard(hosts):
         background_class=constants.BACKGROUND_CLASS)
 
 
-def render_stats(host):
-    stats = [
-        {
-            "name": "container-one",
-            "usage": [12, 23, 14, 35, 27, 50, 65, 85, 123, 63.6, 156, 78]
-        },
-        {
-            "name": "container-two",
-            "usage": [5, 35, 10, 25, 47, 36, 41, 65, 51, 73, 91, 132]
-        }
-    ]
-    return render_template("stats.html", stats=stats)
+def render_stats(docker_host):
+    containers = host.get_host_containers(docker_host)
+    return render_template(
+        "stats.html",
+        containers=containers)
 
 
-# def render_stats(host):
-#     return render_template(
-#         "stats.html",
-#         color_bkg=constants.COLOR_BACKGROUND,
-#         containers = containers)
-# hostname=hostname)
-
-def get_stats(hosts):
-    return host.get_stats(hosts)
+def get_stats(docker_host):
+    return host.get_stats(docker_host)

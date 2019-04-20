@@ -17,12 +17,12 @@ def index():
 
 @app.route('/stats')
 def stats():
-    return renderer.render_stats(hosts)
+    return renderer.render_stats(hosts[0])
 
 
 @app.route('/get_stats')
 def get_stats():
-    return renderer.get_stats(hosts[:1])
+    return renderer.get_stats(hosts[0])
 
 
 if __name__ == '__main__':
