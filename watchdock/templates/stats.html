@@ -149,14 +149,6 @@
 
         var usage = 0;
         function addData() {
-            statsLineChart.data.datasets.forEach(set => {
-                set.data.shift();
-            }); 
-                
-            // statsLineChart.data.datasets[0].data.shift();
-            // statsLineChart.data.datasets[1].data.shift();
-            statsLineChart.data.labels.shift();
-            
             $.ajax({
                 url: '/get_stats',
                 type: 'GET',
@@ -165,6 +157,7 @@
                     for(i=0; i < response.length; i++) {                        
                         usage = parseFloat(response[i]['usage']);
                         statsLineChart.data.datasets[i].data.push(usage);
+                        statsLineChart.data.datasets[i].data.shift();
                     }
                 },
                 error: function (res) {
@@ -180,7 +173,7 @@
             } else {
                 statsLineChart.data.labels.push('');
             }
-
+            statsLineChart.data.labels.shift();
             statsLineChart.update();
         }
 
@@ -191,8 +184,7 @@
         });
 
         window.onload = function() {
-            
-            setInterval('addData()', 3000);
+            setInterval('addData()', 1000);
         };
                 
     </script>
