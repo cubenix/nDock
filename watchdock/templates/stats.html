@@ -165,11 +165,10 @@
                 }
             });
 
-            var ctime = new Date();
+            var ctime = new Date ();
             var csecs = moment(ctime).format("s");
             if (csecs % 5 === 0) {
-                var label = csecs == '0' ? moment(ctime).format("mm:ss") : moment(ctime).format(":ss");
-                statsLineChart.data.labels.push(label);
+                statsLineChart.data.labels.push(moment(ctime).format("mm:ss"));
             } else {
                 statsLineChart.data.labels.push('');
             }
