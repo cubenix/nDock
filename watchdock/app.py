@@ -1,10 +1,13 @@
-from flask import Flask
+from flask import Flask, request
 from config_manager import ConfigManager
 import services.renderer as renderer
+from models.host import Host
 
 
 app = Flask(__name__)
-hosts = ConfigManager().get_hosts()
+config_manager = ConfigManager()
+hosts = config_manager.get_hosts()
+host_dict = config_manager.get_host_dict()
 
 
 @app.route('/')
@@ -15,14 +18,18 @@ def index():
     return renderer.render_dashboard(hosts)
 
 
-@app.route('/stats')
-def stats():
-    return renderer.render_stats(hosts[0])
+@app.route('/stats/<hostname>')
+def stats(hostname):
+    print(hostname)
+    host = Host(name=hostname, IP=host_dict[hostname])
+    return renderer.render_stats(host)
 
 
 @app.route('/get_stats')
 def get_stats():
-    return renderer.get_stats(hosts[0])
+    hostname = request.args.get('hostname')
+    host = Host(hostname, host_dict[hostname])
+    return renderer.get_stats(host)
 
 
 if __name__ == '__main__':

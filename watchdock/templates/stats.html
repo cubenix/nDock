@@ -146,12 +146,12 @@
                 }
             }
         };
-
         var usage = 0;
         function addData() {
             $.ajax({
                 url: '/get_stats',
                 type: 'GET',
+                data:  { 'hostname': '{{ docker_host.name }}' },
                 success: function (res) {
                     let response = JSON.parse(res);                    
                     for(i=0; i < response.length; i++) {                        
@@ -183,7 +183,7 @@
         });
 
         window.onload = function() {
-            setInterval('addData()', 1000);
+            setInterval('addData()', 3000);
         };
                 
     </script>

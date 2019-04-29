@@ -23,7 +23,8 @@ def render_stats(docker_host):
     containers = host.get_host_containers(docker_host)
     return render_template(
         "stats.html",
-        containers=containers)
+        containers=containers,
+        docker_host=docker_host)
 
 
 def get_stats(docker_host):
