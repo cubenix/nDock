@@ -11,6 +11,9 @@ class ConfigManager:
     def get_hosts(self):
         return self.config.hosts
 
+    def get_host_dict(self):
+        return self.config.host_dict
+
     def __read_config(self):
         with open('config.json') as config_file:
             config = json.load(config_file)
