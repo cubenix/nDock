@@ -19,12 +19,13 @@ def render_dashboard(hosts):
         background_class=constants.BACKGROUND_CLASS)
 
 
-def render_stats(docker_host):
+def render_stats(docker_host, hosts):
     containers = host.get_host_containers(docker_host)
     return render_template(
         "stats.html",
         containers=containers,
-        docker_host=docker_host)
+        docker_host=docker_host,
+        host_details=hosts)
 
 
 def get_stats(docker_host):

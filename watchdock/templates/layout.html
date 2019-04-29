@@ -43,12 +43,33 @@
             <hr class="sidebar-divider my-0">
       
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
+            <li id="nav-dashboard" class="nav-item active">
               <a class="nav-link" href="/">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Dashboard</span></a>
             </li>
             
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+      
+            <!-- Nav Item - Docker Hosts -->
+            <li class="nav-item" id="nav-docker-hosts">
+              <a id="nav-collapse-hosts" class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseHosts" aria-expanded="true" aria-controls="collapseHosts">
+                <i class="fas fa-fw fa-desktop"></i>
+                <span>Docker Hosts</span>
+              </a>
+              <div id="collapseHosts" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                  {% for host in host_details %}
+                    <a id="{{ host.name}}-link" class="collapse-item" href="/stats/{{ host.name }}">{{ host.name.upper() }}</a>  
+                  {% endfor %}
+                </div>
+              </div>
+            </li>
+
+            <!-- Divider for toggle -->
+            <hr class="sidebar-divider d-none d-md-block">
+
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">
               <button class="rounded-circle border-0" id="sidebarToggle"></button>

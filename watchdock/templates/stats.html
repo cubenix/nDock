@@ -183,6 +183,12 @@
         });
 
         window.onload = function() {
+            document.getElementById("nav-dashboard").classList.remove("active");
+            document.getElementById("nav-docker-hosts").classList.add("active");
+            document.getElementById("{{ docker_host.name }}-link").classList.add("active");
+            document.getElementById("nav-collapse-hosts").classList.remove("collapsed");
+            document.getElementById("collapseHosts").classList.add("show");
+            document.getElementById("nav-dashboard").classList.add("inactive");
             setInterval('addData()', 3000);
         };
                 

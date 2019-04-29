@@ -22,7 +22,7 @@ def index():
 def stats(hostname):
     print(hostname)
     host = Host(name=hostname, IP=host_dict[hostname])
-    return renderer.render_stats(host)
+    return renderer.render_stats(host, hosts)
 
 
 @app.route('/get_stats')
