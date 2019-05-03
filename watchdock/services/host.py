@@ -18,6 +18,7 @@ def get_containers(hosts):
     for host in hosts:
         client = __create_client(host)
         host_containers[host.name] = len(client.containers.list())
+    client.close()
     return host_containers
 
 
@@ -39,6 +40,7 @@ def get_host_containers(host):
             "name": container_list[index].name,
             "color_code": constants.COLOR_BACKGROUND[index]
         })
+    client.close()
     return containers
 
 
