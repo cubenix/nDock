@@ -3,6 +3,7 @@ Module to handle requests and render required template.
 """
 from flask import render_template
 import services.host as host
+import services.container as container
 import constants
 
 
@@ -20,7 +21,7 @@ def render_dashboard(hosts):
 
 
 def render_stats(docker_host, hosts):
-    containers = host.get_host_containers(docker_host)
+    containers = host.get_containers_and_color_codes(docker_host)
     return render_template(
         "stats.html",
         containers=containers,
@@ -28,5 +29,5 @@ def render_stats(docker_host, hosts):
         host_details=hosts)
 
 
-def get_stats(docker_host):
-    return host.get_stats(docker_host)
+def get_stats(host, container_id):
+    return container.get_stats(host, container_id)

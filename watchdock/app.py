@@ -1,4 +1,5 @@
 from flask import Flask, request
+import json
 from config_manager import ConfigManager
 import services.renderer as renderer
 from models.host import Host
@@ -20,7 +21,6 @@ def index():
 
 @app.route('/stats/<hostname>')
 def stats(hostname):
-    print(hostname)
     host = Host(name=hostname, IP=host_dict[hostname])
     return renderer.render_stats(host, hosts)
 
@@ -28,8 +28,12 @@ def stats(hostname):
 @app.route('/get_stats')
 def get_stats():
     hostname = request.args.get('hostname')
+    container_id = request.args.get('containerId')
     host = Host(hostname, host_dict[hostname])
-    return renderer.get_stats(host)
+    return json.dumps({
+        'usage': renderer.get_stats(host, container_id),
+        'cIndex': request.args.get('cIndex')
+    })
 
 
 if __name__ == '__main__':

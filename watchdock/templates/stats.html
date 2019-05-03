@@ -146,24 +146,27 @@
                 }
             }
         };
-        var usage = 0;
+        var usage, cIndex = 0;
+        var containers = JSON.parse('{{ containers|tojson }}');
+
         function addData() {
-            $.ajax({
-                url: '/get_stats',
-                type: 'GET',
-                data:  { 'hostname': '{{ docker_host.name }}' },
-                success: function (res) {
-                    let response = JSON.parse(res);                    
-                    for(i=0; i < response.length; i++) {                        
-                        usage = parseFloat(response[i]['usage']);
-                        statsLineChart.data.datasets[i].data.push(usage);
-                        statsLineChart.data.datasets[i].data.shift();
+            for (i=0; i < containers.length; i++) {
+                $.ajax({
+                    url: '/get_stats',
+                    type: 'GET',
+                    data:  { 'hostname': '{{ docker_host.name }}', 'containerId': containers[i]['id'], 'cIndex': i },
+                    success: function (res) {
+                        let response = JSON.parse(res);                    
+                        usage = parseFloat(response['usage']);
+                        cIndex = parseInt(response['cIndex'])
+                        statsLineChart.data.datasets[cIndex].data.push(usage);
+                        statsLineChart.data.datasets[cIndex].data.shift();
+                    },
+                    error: function (res) {
+                        console.log(res);
                     }
-                },
-                error: function (res) {
-                    console.log(res);
-                }
-            });
+                });
+            }
 
             var ctime = new Date ();
             var csecs = moment(ctime).format("s");
