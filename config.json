@@ -1,8 +1,24 @@
 {
     "hosts": [
         { 
-            "name": "hostname",
-            "IP": "host-ip"
+            "name": "mg-test2",
+            "IP": "172.27.127.102"
+        },
+        { 
+            "name": "mglab-srv1",
+            "IP": "172.27.127.139"
+        },
+        { 
+            "name": "mglab-srv2",
+            "IP": "172.27.127.133"
+        },
+        { 
+            "name": "mglab-srv4",
+            "IP": "172.27.127.134"
+        },
+        { 
+            "name": "mglab-srv3",
+            "IP": "172.27.127.145"
         }
     ]
 }

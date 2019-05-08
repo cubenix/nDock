@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -16,14 +15,11 @@ func init() {
 	if err != nil {
 		log.Fatalln("Failed to read the configuration")
 	}
-
-	for k, h := range conf.Hosts {
-		fmt.Printf("Hostname-%v: %v\n", k, h.Name)
-	}
+	handlers.Hosts = &conf.Hosts
 }
 
 func main() {
-	http.HandleFunc("/", handlers.Dashboard)
+	http.HandleFunc("/hosts", handlers.DockerHosts)
 
 	// create the server and start listening
 	server := http.Server{
