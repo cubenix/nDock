@@ -1,14 +1,25 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
 	"github.com/gauravgahlot/watchdock/api/handlers"
+	"github.com/gauravgahlot/watchdock/api/services"
 )
 
 func init() {
-	// TODO: read the config.json file for Docker hosts
+	var reader services.ConfigReader = services.JSONConfigReader{}
+	conf, err := reader.ReadConfig()
+
+	if err != nil {
+		log.Fatalln("Failed to read the configuration")
+	}
+
+	for k, h := range conf.Hosts {
+		fmt.Printf("Hostname-%v: %v\n", k, h.Name)
+	}
 }
 
 func main() {
