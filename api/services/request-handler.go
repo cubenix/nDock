@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/gauravgahlot/watchdock/api/types"
+	"github.com/gauravgahlot/watchdock/types"
 )
 
 type handleFunc func(w http.ResponseWriter, r *http.Request)
