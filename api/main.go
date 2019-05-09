@@ -1,15 +1,20 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"net/http"
 
 	"github.com/gauravgahlot/watchdock/api/services"
 )
 
+const constAPIEndpoint = "0.0.0.0:5000"
+
+var apiEndpoint = flag.String("api", constAPIEndpoint, "Endpoint for WatchDock API")
 var handler *services.Handler
 
 func init() {
+	flag.Parse()
 	var reader services.ConfigReader = services.JSONConfigReader{}
 	conf, err := reader.ReadConfig()
 
@@ -24,8 +29,8 @@ func main() {
 
 	// create the server and start listening
 	server := http.Server{
-		Addr: "0.0.0.0:5000",
+		Addr: *apiEndpoint,
 	}
-	log.Println("Server Listening at PORT: 5000")
+	log.Println("Server Listening at:", *apiEndpoint)
 	log.Fatal(server.ListenAndServe())
 }
