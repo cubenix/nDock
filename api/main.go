@@ -4,9 +4,10 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gauravgahlot/watchdock/api/handlers"
 	"github.com/gauravgahlot/watchdock/api/services"
 )
+
+var handler services.Handler
 
 func init() {
 	var reader services.ConfigReader = services.JSONConfigReader{}
@@ -15,11 +16,11 @@ func init() {
 	if err != nil {
 		log.Fatalln("Failed to read the configuration")
 	}
-	handlers.Hosts = &conf.Hosts
+	handler = services.Handler{Hosts: &conf.Hosts}
 }
 
 func main() {
-	http.HandleFunc("/hosts", handlers.DockerHosts)
+	http.HandleFunc("/hosts", handler.DockerHosts)
 
 	// create the server and start listening
 	server := http.Server{
