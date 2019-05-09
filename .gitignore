@@ -60,9 +60,15 @@ typings/
 # next.js build output
 .next
 
-# Python virtual environment files
-venv/
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
 
-# compiled Python files
-*.pyc
-__pycache__
+# Test binary, build with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
