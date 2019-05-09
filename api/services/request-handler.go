@@ -1,7 +1,7 @@
 package services
 
 import (
-	"fmt"
+	"encoding/json"
 	"net/http"
 
 	"github.com/gauravgahlot/watchdock/types"
@@ -29,8 +29,6 @@ func (h *Handler) initializeRoutes() {
 }
 
 func (h *Handler) dockerHosts(w http.ResponseWriter, r *http.Request) {
-	for k, h := range *h.Hosts {
-		fmt.Printf("Hostname-%v: %v\n", k, h.Name)
-	}
-	w.Write([]byte("Docker hosts"))
+	data, _ := json.Marshal(h.Hosts)
+	w.Write([]byte(data))
 }
