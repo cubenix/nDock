@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option go_package = "pb";
+
+message DockerHost {
+    string ip = 1;
+    string name = 2;
+    string colorCode = 3;
+}
+
+message GetContainersCountRequest {
+    repeated string hosts = 1;
+}
+
+message GetContainersCountResponse {
+    message HostContainerMapField { 
+        string host = 1;
+        int32 count = 2;
+    }
+
+    repeated HostContainerMapField hostContainers = 1;
+}
+
+service DockerHostService {
+    rpc GetContainersCount(GetContainersCountRequest) returns (GetContainersCountResponse);
+}

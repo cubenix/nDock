@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option go_package = "pb";
+
+message Container {
+    string id = 1;
+    string name = 2;
+}
+
+message GetContainerRequest {
+    string id = 1;
+}
+
+message GetContainerResponse {
+    Container container = 1;
+}
+
+service ContainerService {
+    rpc GetContainer (GetContainerRequest) returns (GetContainerResponse);
+}
