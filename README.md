@@ -1,6 +1,6 @@
 # WatchDock
 
-WatchDock is an open-source project built around the idea of managing **Docker containers** running on **individual** hosts, with an ease.
+WatchDock is an open-source project built around the idea of managing **Docker containers** running on **individual** hosts.
 
 
 ## Features 
@@ -23,3 +23,5 @@ Below is a list of features in WatchDock upcoming releases:
   - [ ] Add new tag
   - [ ] Delete an image
 
+
+_Note_: Refer the [docs](https://github.com/gauravgahlot/watchdock/tree/master/docs) to make any changes and run the application.
