@@ -1,6 +1,7 @@
 package main
 
 import (
+	"html/template"
 	"log"
 	"net/http"
 
@@ -37,6 +38,19 @@ func main() {
 
 	// setup the request handler
 	handler.Clients = rpc.InitializeClients(conn)
+
+	templates := populateTemplates()
+	http.HandleFunc("/func", func(w http.ResponseWriter, r *http.Request) {
+		t := templates.Lookup("index.html")
+		if t != nil {
+			err := t.Execute(w, nil)
+			if err != nil {
+				log.Fatal(err)
+			}
+		} else {
+			w.WriteHeader(http.StatusNotFound)
+		}
+	})
 	registerHandlers()
 
 	// setup the server and start listening
@@ -47,8 +61,20 @@ func main() {
 	log.Fatal(server.ListenAndServe())
 }
 
+func populateTemplates() *template.Template {
+	result := template.New("templates")
+	const basePath = "client/templates"
+	template.Must(result.ParseGlob(basePath + "/*.html"))
+	return result
+}
+
 func registerHandlers() {
 	log.Println("registering handlers")
 	http.HandleFunc("/containers", handler.Routes["/containers"])
 	http.HandleFunc("/container", handler.Routes["/container"])
+
+	// handlers for static content
+	http.Handle("/js/", http.FileServer(http.Dir("client/public")))
+	http.Handle("/vendor/", http.FileServer(http.Dir("client/public")))
+	http.Handle("/css/", http.FileServer(http.Dir("client/public")))
 }
