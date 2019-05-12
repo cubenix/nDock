@@ -8,17 +8,16 @@ message DockerHost {
     string colorCode = 3;
 }
 
+message HostContainerCount {
+    map<string, int32> containers = 1;
+}
+
 message GetContainersCountRequest {
     repeated string hosts = 1;
 }
 
 message GetContainersCountResponse {
-    message HostContainerMapField { 
-        string host = 1;
-        int32 count = 2;
-    }
-
-    repeated HostContainerMapField hostContainers = 1;
+    repeated HostContainerCount hostContainers = 1;
 }
 
 service DockerHostService {
