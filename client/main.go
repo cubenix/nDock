@@ -1,12 +1,11 @@
 package main
 
 import (
-	"context"
 	"log"
+	"net/http"
 
 	"github.com/gauravgahlot/watchdock/client/rpc"
 	"github.com/gauravgahlot/watchdock/client/services"
-	"github.com/gauravgahlot/watchdock/pb"
 
 	"google.golang.org/grpc"
 )
@@ -16,10 +15,7 @@ const (
 	clientPort = ":8080"
 )
 
-var (
-	handler *services.Handler
-	clients *rpc.Clients
-)
+var handler *services.Handler
 
 func init() {
 	var reader services.ConfigReader = services.JSONConfigReader{}
@@ -32,34 +28,27 @@ func init() {
 }
 
 func main() {
+	// create a connection to be used by service clients
 	conn, err := grpc.Dial("localhost"+serverPort, grpc.WithInsecure())
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer conn.Close()
-	clients = rpc.InitializeClients(conn)
-	// server := http.Server{
-	// 	Addr: "localhost" + clientPort,
-	// }
-	// log.Println("Client App listening at port", clientPort)
-	// log.Fatal(server.ListenAndServe())
 
-	getContainersCount(clients.DockerService)
-	getContainer(clients.ContainerService)
+	// setup the request handler
+	handler.Clients = rpc.InitializeClients(conn)
+	registerHandlers()
+
+	// setup the server and start listening
+	server := http.Server{
+		Addr: "localhost" + clientPort,
+	}
+	log.Println("Client App listening at port", clientPort)
+	log.Fatal(server.ListenAndServe())
 }
 
-func getContainersCount(client pb.DockerHostServiceClient) {
-	res, err := client.GetContainersCount(context.Background(), &pb.GetContainersCountRequest{})
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Println(res.HostContainers)
-}
-
-func getContainer(client pb.ContainerServiceClient) {
-	res, err := client.GetContainer(context.Background(), &pb.GetContainerRequest{Id: "container-id"})
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Println(res)
+func registerHandlers() {
+	log.Println("registering handlers")
+	http.HandleFunc("/containers", handler.Routes["/containers"])
+	http.HandleFunc("/container", handler.Routes["/container"])
 }
