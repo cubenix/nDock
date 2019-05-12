@@ -19,10 +19,16 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	server := grpc.NewServer()
-	pb.RegisterDockerHostServiceServer(server, new(services.DockerHostService))
-	pb.RegisterContainerServiceServer(server, new(services.ContainerService))
+
+	// register services with gRPC server
+	registerServices(server)
+
 	log.Println("Server listening at port", port)
 	server.Serve(lis)
+}
+
+func registerServices(s *grpc.Server) {
+	pb.RegisterDockerHostServiceServer(s, new(services.DockerHostService))
+	pb.RegisterContainerServiceServer(s, new(services.ContainerService))
 }
