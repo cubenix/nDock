@@ -10,11 +10,11 @@ import (
 )
 
 // GetContainersCount gets response from gRPC server
-func GetContainersCount(c pb.DockerHostServiceClient, hosts *[]types.Host) (*[]map[string]int, error) {
+func GetContainersCount(c pb.DockerHostServiceClient, hosts *[]types.Host) (*[]types.Host, error) {
 	res, err := c.GetContainersCount(context.Background(), convert.ToGetContainersCountRequest(hosts))
 	if err != nil {
 		log.Fatal(err)
 		return nil, err
 	}
-	return convert.ToGetContainersCountResponse(res, *hosts), nil
+	return convert.ToHostsViewModel(res, *hosts), nil
 }
