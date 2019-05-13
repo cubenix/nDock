@@ -1,3 +1,31 @@
 {{define "content"}}
-    <h1> Welcome back to WatchDock!</h1>
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+    </div>
+
+    <!-- Docker Host Cards -->
+    <div class="row">
+        {{ with .Hosts }}
+            {{ range . }}
+                <div class="col-xl-3 col-md-6 mb-4">
+                  <div class="card text-white shadow">
+                    <a href="/stats/{{ .Name }}">
+                      <div class="card-body {{ .BGColor }}">
+                         {{ .Name }} 
+                          <div>
+                            <i class="fa fa-desktop fa-lg" style="float: right; margin-right: 5px; margin-top: -10px;" aria-hidden="true"></i>
+                          </div>
+                          <div class="text-white small">{{ .IP }}</div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              
+             
+            {{ end }}
+        {{ end }}
+    </div> 
+
 {{end}}
