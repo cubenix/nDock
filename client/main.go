@@ -44,21 +44,7 @@ func main() {
 
 	// setup the request handler
 	handler.Clients = rpc.InitializeClients(conn)
-
-	templates := populateTemplates()
-	http.HandleFunc("/home", func(w http.ResponseWriter, r *http.Request) {
-		requestedFile := r.URL.Path[1:]
-		template := templates[requestedFile+".html"]
-		context := base{Title: "Home"}
-		if template != nil {
-			err := template.Execute(w, context)
-			if err != nil {
-				log.Fatal(err)
-			}
-		} else {
-			w.WriteHeader(http.StatusNotFound)
-		}
-	})
+	handler.Templates = populateTemplates()
 	registerHandlers()
 
 	// setup the server and start listening
@@ -67,17 +53,6 @@ func main() {
 	}
 	log.Println("Client App listening at port", clientPort)
 	log.Fatal(server.ListenAndServe())
-}
-
-func registerHandlers() {
-	log.Println("registering handlers")
-	http.HandleFunc("/containers", handler.Routes["/containers"])
-	http.HandleFunc("/container", handler.Routes["/container"])
-
-	// handlers for static content
-	http.Handle("/js/", http.FileServer(http.Dir("client/public")))
-	http.Handle("/vendor/", http.FileServer(http.Dir("client/public")))
-	http.Handle("/css/", http.FileServer(http.Dir("client/public")))
 }
 
 func populateTemplates() map[string]*template.Template {
@@ -111,4 +86,15 @@ func populateTemplates() map[string]*template.Template {
 		result[fi.Name()] = tmpl
 	}
 	return result
+}
+
+func registerHandlers() {
+	http.HandleFunc("/home", handler.Routes["home"])
+	http.HandleFunc("/containers", handler.Routes["containers"])
+	http.HandleFunc("/container", handler.Routes["container"])
+
+	// handlers for static content
+	http.Handle("/js/", http.FileServer(http.Dir("client/public")))
+	http.Handle("/vendor/", http.FileServer(http.Dir("client/public")))
+	http.Handle("/css/", http.FileServer(http.Dir("client/public")))
 }
