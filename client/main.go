@@ -85,9 +85,9 @@ func populateTemplates() map[string]*template.Template {
 }
 
 func registerHandlers() {
+	http.Handle("/", http.RedirectHandler("/home", http.StatusPermanentRedirect))
 	http.HandleFunc("/home", handler.Routes["home"])
 	http.HandleFunc("/containers", handler.Routes["containers"])
-	http.HandleFunc("/container", handler.Routes["container"])
 
 	// handlers for static content
 	http.Handle("/js/", http.FileServer(http.Dir("client/public")))

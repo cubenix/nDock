@@ -6,11 +6,10 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gauravgahlot/watchdock/types/viewmodels"
-
 	"github.com/gauravgahlot/watchdock/client/rpc"
 	"github.com/gauravgahlot/watchdock/client/services/helpers"
 	"github.com/gauravgahlot/watchdock/types"
+	vm "github.com/gauravgahlot/watchdock/types/viewmodels"
 )
 
 type handleFunc func(w http.ResponseWriter, r *http.Request)
@@ -51,7 +50,7 @@ func (h *Handler) home(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusInternalServerError)
 		}
 
-		context := viewmodels.Home{Hosts: *res}
+		context := vm.Home{Hosts: *res}
 		context.Title = "Home"
 		err := template.Execute(w, context)
 		if err != nil {
@@ -76,7 +75,7 @@ func (h *Handler) containers(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 	}
 
-	encErr := json.NewEncoder(w).Encode(viewmodels.Home{Hosts: *res})
+	encErr := json.NewEncoder(w).Encode(vm.Home{Hosts: *res})
 	if encErr != nil {
 		log.Fatal("Error sending data: ", encErr)
 		w.WriteHeader(http.StatusInternalServerError)
