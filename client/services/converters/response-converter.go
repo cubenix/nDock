@@ -14,7 +14,7 @@ func ToHostsViewModel(r *pb.GetContainersCountResponse, hosts []types.Host) *[]v
 		h := vm.Host{
 			Name:           hosts[i].Name,
 			IP:             hosts[i].IP,
-			ContainerCount: int(r.HostContainers[i].Containers[hosts[i].Name]),
+			ContainerCount: int(r.HostContainers[i].Containers[hosts[i].IP]),
 			BGColor:        constants.BGClasses[i],
 			ColorCode:      constants.TextClasses[i],
 			BGColorCode:    constants.BGCodes[i],

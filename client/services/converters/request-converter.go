@@ -9,7 +9,7 @@ import (
 func ToGetContainersCountRequest(hosts *[]types.Host, all bool) *pb.GetContainersCountRequest {
 	req := pb.GetContainersCountRequest{Hosts: []string{}, All: all}
 	for _, h := range *hosts {
-		req.Hosts = append(req.Hosts, h.Name)
+		req.Hosts = append(req.Hosts, h.IP)
 	}
 	return &req
 }
