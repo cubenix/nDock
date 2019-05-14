@@ -9,13 +9,9 @@ import (
 
 	"github.com/gauravgahlot/watchdock/client/rpc"
 	"github.com/gauravgahlot/watchdock/client/services"
+	"github.com/gauravgahlot/watchdock/constants"
 
 	"google.golang.org/grpc"
-)
-
-const (
-	serverPort = ":5000"
-	clientPort = ":8000"
 )
 
 var handler *services.Handler
@@ -36,7 +32,7 @@ func init() {
 
 func main() {
 	// create a connection to be used by service clients
-	conn, err := grpc.Dial("localhost"+serverPort, grpc.WithInsecure())
+	conn, err := grpc.Dial("localhost"+constants.ServerPort, grpc.WithInsecure())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -49,9 +45,9 @@ func main() {
 
 	// setup the server and start listening
 	server := http.Server{
-		Addr: "localhost" + clientPort,
+		Addr: "localhost" + constants.ClientPort,
 	}
-	log.Println("Client App listening at port", clientPort)
+	log.Println("Client App listening at port", constants.ClientPort)
 	log.Fatal(server.ListenAndServe())
 }
 

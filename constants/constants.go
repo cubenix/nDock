@@ -1,5 +1,11 @@
 package constants
 
+// Host ports for web client and gRPC server
+const (
+	ClientPort = ":8000"
+	ServerPort = ":5000"
+)
+
 // DockerAPIPort is the default TCP port on each host, at which Docker should be listening for TCP requests
 const DockerAPIPort = ":2375"
 
