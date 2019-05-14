@@ -1,5 +1,14 @@
 package constants
 
+// DockerAPIPort is the default TCP port on each host, at which Docker should be listening for TCP requests
+const DockerAPIPort = ":2375"
+
+// DockerAPIProtocol is the default protocol used to communicate with Docker hosts
+const DockerAPIProtocol = "tcp://"
+
+// DockerAPIVersion is the default API version used while creating a Docker client
+const DockerAPIVersion = "v1.38"
+
 // BGClasses is a set background classes
 var BGClasses = [6]string{
 	bgPrimary,
