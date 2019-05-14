@@ -2,7 +2,6 @@
   <style>
     a:link, a:visited {
       text-decoration: none;
-      color: white; 
       cursor: pointer;
     }
   </style>
@@ -20,7 +19,7 @@
             {{ range . }}
                 <div class="col-xl-3 col-md-6 mb-4">
                   <div class="card text-white shadow">
-                    <a href="/stats/{{ .Name }}">
+                    <a href="/stats/{{ .Name }}" style="color:white;">
                       <div class="card-body {{ .BGColor }}">
                          {{ .Name }} 
                           <div>
@@ -43,13 +42,23 @@
 
           <!-- Card Header -->
           <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-            <h6 class="m-0 font-weight-bold text-primary">Running Containers</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Containers</h6>
+            <div class="dropdown no-arrow">
+              <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                <div class="dropdown-header">Options:</div>
+                <a id="include-stopped" class="dropdown-item" style="color:#3a3b45; cursor: pointer;">Include Stopped</a>
+                <a id="exclude-stopped" class="dropdown-item" style="color:#3a3b45; cursor: pointer;">Exclude Stopped</a>
+              </div>
+            </div>
           </div>
 
           <!-- Card Body -->
           <div class="card-body">
             <div class="chart-pie pt-4 pb-2">
-              <canvas id="myPieChart"></canvas>
+              <canvas id="hostContainersChart"></canvas>
             </div>
             <script>
                 var hosts = [];
@@ -85,8 +94,8 @@
     Chart.defaults.global.defaultFontColor = '#858796';
 
     // Pie Chart Example
-    var ctx = document.getElementById("myPieChart");
-    var myPieChart = new Chart(ctx, {
+    var ctx = document.getElementById("hostContainersChart");
+    var hostContainersChart = new Chart(ctx, {
       type: 'doughnut',
       data: {
         labels: hosts,
@@ -114,5 +123,45 @@
         cutoutPercentage: 70,
       },
     });        
+    
+    $('#include-stopped').click(function() {
+      $.ajax({
+        url: '/containers',
+        type: 'POST',
+        data: JSON.stringify({ all: true }),
+        contentType: "application/json; charset=utf-8",
+        success: function (res) {
+          updateHostContainersChart(res);
+        },
+        error: function(res) {
+          console.log(res);
+        }
+      });
+    });
+
+    $('#exclude-stopped').click(function() {
+      $.ajax({
+        url: '/containers',
+        type: 'POST',
+        data: JSON.stringify({ all: false }),
+        contentType: "application/json; charset=utf-8",
+        success: function (res) {
+          updateHostContainersChart(res);
+        },
+        error: function(res) {
+          console.log(res);
+        }
+      });
+    });
+
+    function updateHostContainersChart(res) {
+      var data = JSON.parse(res);
+      containers = [];
+      for(var i=0; i<data.Hosts.length; i++) {
+        containers.push(data.Hosts[i].containerCount);
+      }
+      hostContainersChart.data.datasets[0].data = containers;
+      hostContainersChart.update();       
+    }
   </script>
 {{ end }}

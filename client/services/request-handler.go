@@ -1,6 +1,7 @@
 package services
 
 import (
+	"encoding/json"
 	"html/template"
 	"log"
 	"net/http"
@@ -13,6 +14,10 @@ import (
 )
 
 type handleFunc func(w http.ResponseWriter, r *http.Request)
+
+type containersReqData struct {
+	All bool `json:"all"`
+}
 
 // Handler represents struct with some data and request handlers for incoming HTTP requests
 type Handler struct {
@@ -32,8 +37,7 @@ func NewHandler(hosts *[]types.Host) *Handler {
 func (h *Handler) initializeRoutes() {
 	h.Routes = map[string]handleFunc{
 		"home":       h.home,
-		"containers": h.dashboard,
-		"container":  h.getContainer,
+		"containers": h.containers,
 	}
 }
 
@@ -41,7 +45,7 @@ func (h *Handler) home(w http.ResponseWriter, r *http.Request) {
 	requestedFile := r.URL.Path[1:]
 	template := h.Templates[requestedFile+".html"]
 	if template != nil {
-		res, re := helpers.GetContainersCount(h.Clients.DockerService, h.hosts)
+		res, re := helpers.GetContainersCount(h.Clients.DockerService, h.hosts, false)
 		if re != nil {
 			log.Fatal(re)
 			w.WriteHeader(http.StatusInternalServerError)
@@ -58,18 +62,23 @@ func (h *Handler) home(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *Handler) dashboard(w http.ResponseWriter, r *http.Request) {
-	res, err := helpers.GetContainersCount(h.Clients.DockerService, h.hosts)
-	if err != nil {
-		w.WriteHeader(404)
-		w.Write([]byte("Something went wrong!"))
+func (h *Handler) containers(w http.ResponseWriter, r *http.Request) {
+	var data containersReqData
+	decErr := json.NewDecoder(r.Body).Decode(&data)
+	if decErr != nil {
+		log.Fatal("Error receiving data: ", decErr)
+		w.WriteHeader(http.StatusBadRequest)
 	}
-	log.Println(*res)
-	w.Write([]byte("Welcome to client"))
-}
 
-func (h *Handler) getContainer(w http.ResponseWriter, r *http.Request) {
-	helpers.GetContainer(h.Clients.ContainerService)
-	log.Println("in getContainer")
-	w.Write([]byte("some data"))
+	res, err := helpers.GetContainersCount(h.Clients.DockerService, h.hosts, data.All)
+	if err != nil {
+		log.Fatal(err)
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+
+	encErr := json.NewEncoder(w).Encode(viewmodels.Home{Hosts: *res})
+	if encErr != nil {
+		log.Fatal("Error sending data: ", encErr)
+		w.WriteHeader(http.StatusInternalServerError)
+	}
 }

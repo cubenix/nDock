@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"github.com/gauravgahlot/watchdock/pb"
-	api "github.com/gauravgahlot/watchdock/server/services/api-wrapper"
+	api "github.com/gauravgahlot/watchdock/server/api-wrapper"
 )
 
 // DockerHostService is a gRPC service to serve requests for Docker Hosts
@@ -20,7 +20,7 @@ func (s *DockerHostService) GetContainersCount(ctx context.Context, req *pb.GetC
 	for _, host := range req.Hosts {
 		c := pb.HostContainerCount{Containers: make(map[string]int32)}
 
-		count, err := api.GetContainersCount(host, false)
+		count, err := api.GetContainersCount(host, req.All)
 		if err != nil {
 			log.Fatal(err)
 			c.Containers[host] = -1
