@@ -30,7 +30,11 @@
       </a>
       <div id="collapseHosts" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
-          <a href="#">Hostname</a>
+          {{ with .Hosts }}
+            {{ range . }}
+              <a id="{{ .Name}}-link" class="collapse-item" href="/stats/{{ .Name }}">{{ .Name }}</a> 
+            {{ end }}
+          {{ end }}          
         </div>
       </div>
     </li>
