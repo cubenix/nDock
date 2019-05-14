@@ -4,15 +4,22 @@ import (
 	"github.com/gauravgahlot/watchdock/constants"
 	"github.com/gauravgahlot/watchdock/pb"
 	"github.com/gauravgahlot/watchdock/types"
+	vm "github.com/gauravgahlot/watchdock/types/viewmodels"
 )
 
-// ToHostsViewModel returns a collection of Hosts
-func ToHostsViewModel(r *pb.GetContainersCountResponse, hosts []types.Host) *[]types.Host {
-	res := []types.Host{}
+// ToHostsViewModel returns a collection of Host view model
+func ToHostsViewModel(r *pb.GetContainersCountResponse, hosts []types.Host) *[]vm.Host {
+	res := []vm.Host{}
 	for i := 0; i < len(hosts); i++ {
-		hosts[i].ContainerCount = int(r.HostContainers[i].Containers[hosts[i].Name])
-		hosts[i].BGColor = constants.BGClasses[i]
-		res = append(res, hosts[i])
+		h := vm.Host{
+			Name:           hosts[i].Name,
+			IP:             hosts[i].IP,
+			ContainerCount: int(r.HostContainers[i].Containers[hosts[i].Name]),
+			BGColor:        constants.BGClasses[i],
+			ColorCode:      constants.TextClasses[i],
+			BGColorCode:    constants.BGCodes[i],
+		}
+		res = append(res, h)
 	}
 	return &res
 }
