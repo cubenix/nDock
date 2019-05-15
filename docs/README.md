@@ -1,10 +1,10 @@
-# WatchDock
+# DockerDoodle
 
-WatchDock is an open-source project built around the idea of managing **Docker containers** running on **individual** hosts.
+DockerDoodle is an open-source project built around the idea of managing **Docker containers** running on **individual** hosts.
 
 
 ## Features 
-Below is a list of features in WatchDock upcoming releases:
+Below is a list of features in DockerDoodle upcoming releases:
 ### v0.1.0
 
 - [x] Get the number of containers running on a host
