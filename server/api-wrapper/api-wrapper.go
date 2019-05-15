@@ -7,7 +7,7 @@ import (
 	"github.com/docker/docker/api/types"
 
 	"github.com/docker/docker/client"
-	"github.com/gauravgahlot/watchdock/constants"
+	"github.com/gauravgahlot/dockerdoodle/constants"
 )
 
 // GetContainersCount returns the number of containers running on a host

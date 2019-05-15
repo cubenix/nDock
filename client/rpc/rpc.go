@@ -1,7 +1,7 @@
 package rpc
 
 import (
-	"github.com/gauravgahlot/watchdock/pb"
+	"github.com/gauravgahlot/dockerdoodle/pb"
 	"google.golang.org/grpc"
 )
 

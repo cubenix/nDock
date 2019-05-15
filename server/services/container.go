@@ -3,7 +3,7 @@ package services
 import (
 	"context"
 
-	"github.com/gauravgahlot/watchdock/pb"
+	"github.com/gauravgahlot/dockerdoodle/pb"
 )
 
 // ContainerService is a gRPC service to serve requests for Docker containers

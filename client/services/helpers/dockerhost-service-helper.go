@@ -4,10 +4,10 @@ import (
 	"context"
 	"log"
 
-	convert "github.com/gauravgahlot/watchdock/client/services/converters"
-	"github.com/gauravgahlot/watchdock/pb"
-	"github.com/gauravgahlot/watchdock/types"
-	vm "github.com/gauravgahlot/watchdock/types/viewmodels"
+	convert "github.com/gauravgahlot/dockerdoodle/client/services/converters"
+	"github.com/gauravgahlot/dockerdoodle/pb"
+	"github.com/gauravgahlot/dockerdoodle/types"
+	vm "github.com/gauravgahlot/dockerdoodle/types/viewmodels"
 )
 
 // GetContainersCount gets response from gRPC server

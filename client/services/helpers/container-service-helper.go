@@ -4,7 +4,7 @@ import (
 	"context"
 	"log"
 
-	"github.com/gauravgahlot/watchdock/pb"
+	"github.com/gauravgahlot/dockerdoodle/pb"
 )
 
 // GetContainer get container details for a container ID

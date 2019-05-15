@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/gauravgahlot/watchdock/client/rpc"
-	"github.com/gauravgahlot/watchdock/client/services"
-	"github.com/gauravgahlot/watchdock/constants"
+	"github.com/gauravgahlot/dockerdoodle/client/rpc"
+	"github.com/gauravgahlot/dockerdoodle/client/services"
+	"github.com/gauravgahlot/dockerdoodle/constants"
 
 	"google.golang.org/grpc"
 )

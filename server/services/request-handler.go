@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/gauravgahlot/watchdock/types"
+	"github.com/gauravgahlot/dockerdoodle/types"
 )
 
 type handleFunc func(w http.ResponseWriter, r *http.Request)

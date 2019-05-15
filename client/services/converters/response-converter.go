@@ -1,10 +1,10 @@
 package converters
 
 import (
-	"github.com/gauravgahlot/watchdock/constants"
-	"github.com/gauravgahlot/watchdock/pb"
-	"github.com/gauravgahlot/watchdock/types"
-	vm "github.com/gauravgahlot/watchdock/types/viewmodels"
+	"github.com/gauravgahlot/dockerdoodle/constants"
+	"github.com/gauravgahlot/dockerdoodle/pb"
+	"github.com/gauravgahlot/dockerdoodle/types"
+	vm "github.com/gauravgahlot/dockerdoodle/types/viewmodels"
 )
 
 // ToHostsViewModel returns a collection of Host view model

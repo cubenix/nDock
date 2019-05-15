@@ -1,8 +1,20 @@
 {
     "hosts": [
-        { 
-            "name": "hostname",
-            "IP": "host-IP"
+        {
+            "name": "ec2-docker-node-01",
+            "IP": "13.233.136.85"
+        },
+        {
+            "name": "ec2-docker-node-02",
+            "IP": "13.233.96.94"
+        },
+        {
+            "name": "ec2-docker-node-03",
+            "IP": "13.233.136.72"
+        },
+        {
+            "name": "ec2-docker-node-03",
+            "IP": "35.154.175.148"
         }
     ]
 }

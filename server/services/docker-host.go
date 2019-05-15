@@ -4,8 +4,8 @@ import (
 	"context"
 	"log"
 
-	"github.com/gauravgahlot/watchdock/pb"
-	api "github.com/gauravgahlot/watchdock/server/api-wrapper"
+	"github.com/gauravgahlot/dockerdoodle/pb"
+	api "github.com/gauravgahlot/dockerdoodle/server/api-wrapper"
 )
 
 // DockerHostService is a gRPC service to serve requests for Docker Hosts

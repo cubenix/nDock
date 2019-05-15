@@ -6,10 +6,10 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gauravgahlot/watchdock/client/rpc"
-	"github.com/gauravgahlot/watchdock/client/services/helpers"
-	"github.com/gauravgahlot/watchdock/types"
-	vm "github.com/gauravgahlot/watchdock/types/viewmodels"
+	"github.com/gauravgahlot/dockerdoodle/client/rpc"
+	"github.com/gauravgahlot/dockerdoodle/client/services/helpers"
+	"github.com/gauravgahlot/dockerdoodle/types"
+	vm "github.com/gauravgahlot/dockerdoodle/types/viewmodels"
 )
 
 type handleFunc func(w http.ResponseWriter, r *http.Request)

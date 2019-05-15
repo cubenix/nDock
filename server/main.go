@@ -4,8 +4,8 @@ import (
 	"log"
 	"net"
 
-	"github.com/gauravgahlot/watchdock/pb"
-	"github.com/gauravgahlot/watchdock/server/services"
+	"github.com/gauravgahlot/dockerdoodle/pb"
+	"github.com/gauravgahlot/dockerdoodle/server/services"
 	"google.golang.org/grpc"
 )
 

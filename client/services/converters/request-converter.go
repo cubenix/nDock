@@ -1,8 +1,8 @@
 package converters
 
 import (
-	"github.com/gauravgahlot/watchdock/pb"
-	"github.com/gauravgahlot/watchdock/types"
+	"github.com/gauravgahlot/dockerdoodle/pb"
+	"github.com/gauravgahlot/dockerdoodle/types"
 )
 
 // ToGetContainersCountRequest returns GetContainersCountRequestObject

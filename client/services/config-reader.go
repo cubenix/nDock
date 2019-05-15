@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 
-	"github.com/gauravgahlot/watchdock/types"
+	"github.com/gauravgahlot/dockerdoodle/types"
 )
 
 // ConfigReader represents the service that reads the configuration,
