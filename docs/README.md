@@ -5,7 +5,7 @@ DockerDoodle started as a *fun side project*, hence the name, is an open-source 
 
 <br />Here is the first look:
 
-![Home | DockerDoodle](https://media.giphy.com/media/JrMJTtkkj5GbOmZE2o/giphy.gif)
+![DockerDoodle](https://media.giphy.com/media/JrMJTtkkj5GbOmZE2o/giphy.gif)
 
 
 ## Features 
