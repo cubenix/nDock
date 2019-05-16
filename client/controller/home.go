@@ -8,7 +8,9 @@ import (
 
 	"github.com/gauravgahlot/dockerdoodle/client/helpers"
 	"github.com/gauravgahlot/dockerdoodle/client/rpc"
+	"github.com/gauravgahlot/dockerdoodle/client/viewmodels"
 	vm "github.com/gauravgahlot/dockerdoodle/client/viewmodels"
+	"github.com/gauravgahlot/dockerdoodle/constants"
 	"github.com/gauravgahlot/dockerdoodle/types"
 )
 
@@ -25,13 +27,18 @@ func (h home) registerRoutes() {
 }
 
 func (h home) handleHome(w http.ResponseWriter, r *http.Request) {
-	res, re := helpers.GetContainersCount(h.client, h.hosts, false)
-	if re != nil {
-		log.Fatal(re)
-		w.WriteHeader(http.StatusInternalServerError)
-	}
-	context := vm.Home{Hosts: *res}
+	context := vm.Home{Hosts: []viewmodels.Host{}}
 	context.Title = "Home"
+
+	for i, host := range *h.hosts {
+		context.Hosts = append(context.Hosts, viewmodels.Host{
+			Name:        host.Name,
+			IP:          host.IP,
+			BGColor:     constants.BGClasses[i],
+			ColorCode:   constants.TextClasses[i],
+			BGColorCode: constants.BGCodes[i],
+		})
+	}
 	err := h.homeTemplate.Execute(w, context)
 	if err != nil {
 		log.Fatal(err)
