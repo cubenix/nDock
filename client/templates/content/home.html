@@ -126,7 +126,7 @@
     
     $('#include-stopped').click(function() {
       $.ajax({
-        url: '/containers',
+        url: '/containers-count',
         type: 'POST',
         data: JSON.stringify({ all: true }),
         contentType: "application/json; charset=utf-8",
@@ -141,7 +141,7 @@
 
     $('#exclude-stopped').click(function() {
       $.ajax({
-        url: '/containers',
+        url: '/containers-count',
         type: 'POST',
         data: JSON.stringify({ all: false }),
         contentType: "application/json; charset=utf-8",

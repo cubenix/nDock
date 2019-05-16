@@ -5,17 +5,23 @@ import (
 	"google.golang.org/grpc"
 )
 
-// Clients struct to hold all the service clients
-type Clients struct {
-	DockerService    pb.DockerHostServiceClient
-	ContainerService pb.ContainerServiceClient
+// DockerServiceClient is the client for gRPC DockerService
+type DockerServiceClient pb.DockerHostServiceClient
+
+// ContainerServiceClient is the client for gRPC ContainerService
+type ContainerServiceClient pb.ContainerServiceClient
+
+// Client struct to hold all the service clients
+type Client struct {
+	DockerServiceClient    DockerServiceClient
+	ContainerServiceClient ContainerServiceClient
 }
 
 // InitializeClients initializes client for respective service
-func InitializeClients(conn *grpc.ClientConn) *Clients {
-	c := Clients{
-		DockerService:    pb.NewDockerHostServiceClient(conn),
-		ContainerService: pb.NewContainerServiceClient(conn),
+func InitializeClients(conn *grpc.ClientConn) *Client {
+	c := Client{
+		DockerServiceClient:    pb.NewDockerHostServiceClient(conn),
+		ContainerServiceClient: pb.NewContainerServiceClient(conn),
 	}
 	return &c
 }
