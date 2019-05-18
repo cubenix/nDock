@@ -29,7 +29,7 @@ func InitializeClient(host string) {
 }
 
 // GetContainersCount returns the number of containers running on a host
-func GetContainersCount(host string, all bool) (int32, error) {
+func GetContainersCount(all bool) (int32, error) {
 	c, err := GetContainers(context.Background(), true, all)
 	if err != nil {
 		log.Fatal(err)
