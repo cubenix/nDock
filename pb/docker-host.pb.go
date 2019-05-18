@@ -204,37 +204,205 @@ func (m *GetContainersCountResponse) GetHostContainers() []*HostContainerCount {
 	return nil
 }
 
+type GetContainersRequest struct {
+	Host                 string   `protobuf:"bytes,1,opt,name=host,proto3" json:"host,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GetContainersRequest) Reset()         { *m = GetContainersRequest{} }
+func (m *GetContainersRequest) String() string { return proto.CompactTextString(m) }
+func (*GetContainersRequest) ProtoMessage()    {}
+func (*GetContainersRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1358bea4b2532a29, []int{4}
+}
+
+func (m *GetContainersRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetContainersRequest.Unmarshal(m, b)
+}
+func (m *GetContainersRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetContainersRequest.Marshal(b, m, deterministic)
+}
+func (m *GetContainersRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetContainersRequest.Merge(m, src)
+}
+func (m *GetContainersRequest) XXX_Size() int {
+	return xxx_messageInfo_GetContainersRequest.Size(m)
+}
+func (m *GetContainersRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetContainersRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetContainersRequest proto.InternalMessageInfo
+
+func (m *GetContainersRequest) GetHost() string {
+	if m != nil {
+		return m.Host
+	}
+	return ""
+}
+
+type GetContainersResponse struct {
+	Containers           []*Container `protobuf:"bytes,1,rep,name=containers,proto3" json:"containers,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
+	XXX_unrecognized     []byte       `json:"-"`
+	XXX_sizecache        int32        `json:"-"`
+}
+
+func (m *GetContainersResponse) Reset()         { *m = GetContainersResponse{} }
+func (m *GetContainersResponse) String() string { return proto.CompactTextString(m) }
+func (*GetContainersResponse) ProtoMessage()    {}
+func (*GetContainersResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1358bea4b2532a29, []int{5}
+}
+
+func (m *GetContainersResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetContainersResponse.Unmarshal(m, b)
+}
+func (m *GetContainersResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetContainersResponse.Marshal(b, m, deterministic)
+}
+func (m *GetContainersResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetContainersResponse.Merge(m, src)
+}
+func (m *GetContainersResponse) XXX_Size() int {
+	return xxx_messageInfo_GetContainersResponse.Size(m)
+}
+func (m *GetContainersResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetContainersResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetContainersResponse proto.InternalMessageInfo
+
+func (m *GetContainersResponse) GetContainers() []*Container {
+	if m != nil {
+		return m.Containers
+	}
+	return nil
+}
+
+type GetStatsRequest struct {
+	ContainerIds         []string `protobuf:"bytes,1,rep,name=containerIds,proto3" json:"containerIds,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GetStatsRequest) Reset()         { *m = GetStatsRequest{} }
+func (m *GetStatsRequest) String() string { return proto.CompactTextString(m) }
+func (*GetStatsRequest) ProtoMessage()    {}
+func (*GetStatsRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1358bea4b2532a29, []int{6}
+}
+
+func (m *GetStatsRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetStatsRequest.Unmarshal(m, b)
+}
+func (m *GetStatsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetStatsRequest.Marshal(b, m, deterministic)
+}
+func (m *GetStatsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetStatsRequest.Merge(m, src)
+}
+func (m *GetStatsRequest) XXX_Size() int {
+	return xxx_messageInfo_GetStatsRequest.Size(m)
+}
+func (m *GetStatsRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetStatsRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetStatsRequest proto.InternalMessageInfo
+
+func (m *GetStatsRequest) GetContainerIds() []string {
+	if m != nil {
+		return m.ContainerIds
+	}
+	return nil
+}
+
+type GetStatsReponse struct {
+	Stats                map[string]float32 `protobuf:"bytes,1,rep,name=stats,proto3" json:"stats,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"fixed32,2,opt,name=value,proto3"`
+	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
+	XXX_unrecognized     []byte             `json:"-"`
+	XXX_sizecache        int32              `json:"-"`
+}
+
+func (m *GetStatsReponse) Reset()         { *m = GetStatsReponse{} }
+func (m *GetStatsReponse) String() string { return proto.CompactTextString(m) }
+func (*GetStatsReponse) ProtoMessage()    {}
+func (*GetStatsReponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_1358bea4b2532a29, []int{7}
+}
+
+func (m *GetStatsReponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetStatsReponse.Unmarshal(m, b)
+}
+func (m *GetStatsReponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetStatsReponse.Marshal(b, m, deterministic)
+}
+func (m *GetStatsReponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetStatsReponse.Merge(m, src)
+}
+func (m *GetStatsReponse) XXX_Size() int {
+	return xxx_messageInfo_GetStatsReponse.Size(m)
+}
+func (m *GetStatsReponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetStatsReponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetStatsReponse proto.InternalMessageInfo
+
+func (m *GetStatsReponse) GetStats() map[string]float32 {
+	if m != nil {
+		return m.Stats
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*DockerHost)(nil), "DockerHost")
 	proto.RegisterType((*HostContainerCount)(nil), "HostContainerCount")
 	proto.RegisterMapType((map[string]int32)(nil), "HostContainerCount.ContainersEntry")
 	proto.RegisterType((*GetContainersCountRequest)(nil), "GetContainersCountRequest")
 	proto.RegisterType((*GetContainersCountResponse)(nil), "GetContainersCountResponse")
+	proto.RegisterType((*GetContainersRequest)(nil), "GetContainersRequest")
+	proto.RegisterType((*GetContainersResponse)(nil), "GetContainersResponse")
+	proto.RegisterType((*GetStatsRequest)(nil), "GetStatsRequest")
+	proto.RegisterType((*GetStatsReponse)(nil), "GetStatsReponse")
+	proto.RegisterMapType((map[string]float32)(nil), "GetStatsReponse.StatsEntry")
 }
 
 func init() { proto.RegisterFile("docker-host.proto", fileDescriptor_1358bea4b2532a29) }
 
 var fileDescriptor_1358bea4b2532a29 = []byte{
-	// 291 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x51, 0x3d, 0x4f, 0xf3, 0x30,
-	0x10, 0x56, 0xd2, 0xf6, 0xd5, 0xdb, 0x43, 0x2a, 0xf4, 0x60, 0x08, 0x81, 0xa1, 0x0a, 0x4b, 0x17,
-	0x32, 0x94, 0x05, 0x81, 0x58, 0x08, 0x08, 0x16, 0x18, 0xcc, 0x04, 0x5b, 0x92, 0x9e, 0xd4, 0xa8,
-	0xc1, 0x17, 0x6c, 0xa7, 0x52, 0xff, 0x09, 0x3f, 0x17, 0xd9, 0xa1, 0xa4, 0xea, 0xc7, 0x76, 0xf7,
-	0xf8, 0xee, 0xf9, 0xf0, 0xc1, 0x70, 0xca, 0xf9, 0x9c, 0xd4, 0xe5, 0x8c, 0xb5, 0x89, 0x2b, 0xc5,
-	0x86, 0xa3, 0x57, 0x80, 0x07, 0x07, 0x3e, 0xb3, 0x36, 0x38, 0x00, 0xbf, 0xa8, 0x02, 0x6f, 0xe4,
-	0x8d, 0xfb, 0xc2, 0x2f, 0x2a, 0x44, 0xe8, 0xca, 0xf4, 0x93, 0x02, 0xdf, 0x21, 0xae, 0xc6, 0x73,
-	0xe8, 0xe7, 0x5c, 0xb2, 0x4a, 0x78, 0x4a, 0x41, 0xc7, 0x3d, 0xb4, 0x40, 0xf4, 0xed, 0x01, 0x5a,
-	0xaa, 0x84, 0xa5, 0x49, 0x0b, 0x49, 0x2a, 0xe1, 0x5a, 0x1a, 0x4c, 0x00, 0xf2, 0x15, 0xa2, 0x03,
-	0x6f, 0xd4, 0x19, 0x1f, 0x4c, 0x2e, 0xe2, 0xed, 0xc1, 0xf8, 0xaf, 0xd5, 0x8f, 0xd2, 0xa8, 0xa5,
-	0x58, 0x5b, 0x0b, 0xef, 0xe0, 0x70, 0xe3, 0x19, 0x8f, 0xa0, 0x33, 0xa7, 0xe5, 0xaf, 0x63, 0x5b,
-	0xe2, 0x09, 0xf4, 0x16, 0x69, 0x59, 0x37, 0x9e, 0x7b, 0xa2, 0x69, 0x6e, 0xfc, 0x6b, 0x2f, 0x4a,
-	0xe0, 0xf4, 0x89, 0x5a, 0x3d, 0xed, 0x04, 0x05, 0x7d, 0xd5, 0xa4, 0x8d, 0x5d, 0xb3, 0xbf, 0xd2,
-	0x78, 0xeb, 0x8b, 0xa6, 0xb1, 0xf4, 0x69, 0x59, 0x3a, 0xaa, 0xff, 0xc2, 0x96, 0xd1, 0x3b, 0x84,
-	0xbb, 0x48, 0x74, 0xc5, 0x52, 0x13, 0xde, 0xc2, 0x60, 0xb6, 0x9e, 0x69, 0x15, 0xf5, 0x78, 0x47,
-	0x54, 0xb1, 0x31, 0x3a, 0xc9, 0x60, 0xd8, 0x9e, 0xe2, 0x8d, 0xd4, 0xa2, 0xc8, 0x09, 0x5f, 0x00,
-	0xb7, 0xf5, 0x30, 0x8c, 0xf7, 0x26, 0x09, 0xcf, 0xe2, 0xfd, 0x06, 0xef, 0xbb, 0x1f, 0x7e, 0x95,
-	0x65, 0xff, 0xdc, 0xed, 0xaf, 0x7e, 0x02, 0x00, 0x00, 0xff, 0xff, 0x79, 0xea, 0x87, 0x2a, 0x10,
-	0x02, 0x00, 0x00,
+	// 416 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x53, 0x4f, 0xef, 0xd2, 0x40,
+	0x10, 0x4d, 0x0b, 0x18, 0x18, 0x95, 0x3f, 0x2b, 0x98, 0xba, 0x78, 0x20, 0xeb, 0x85, 0x90, 0xb8,
+	0x41, 0x8c, 0x09, 0xd1, 0xe8, 0xc1, 0x6a, 0xd0, 0x83, 0x1e, 0xca, 0x49, 0x6f, 0xa5, 0x6c, 0x42,
+	0x43, 0xed, 0xd6, 0xee, 0x42, 0xc2, 0xc5, 0xcf, 0xe1, 0x07, 0xf3, 0x03, 0x99, 0xdd, 0xed, 0x3f,
+	0x4a, 0xf5, 0x77, 0x9b, 0x99, 0x7d, 0x33, 0x6f, 0xe6, 0xbd, 0x16, 0x46, 0x7b, 0x1e, 0x1c, 0x59,
+	0xfa, 0xfc, 0xc0, 0x85, 0xa4, 0x49, 0xca, 0x25, 0xc7, 0x83, 0x80, 0xc7, 0xd2, 0x0f, 0x63, 0x96,
+	0x9a, 0x02, 0xf9, 0x0a, 0xf0, 0x41, 0xa3, 0x3e, 0x71, 0x21, 0x51, 0x1f, 0xec, 0x30, 0x71, 0xac,
+	0x99, 0x35, 0xef, 0x79, 0x76, 0x98, 0x20, 0x04, 0xed, 0xd8, 0xff, 0xc1, 0x1c, 0x5b, 0x57, 0x74,
+	0x8c, 0x9e, 0x42, 0x2f, 0xe0, 0x11, 0x4f, 0x5d, 0xbe, 0x67, 0x4e, 0x4b, 0x3f, 0x94, 0x05, 0xf2,
+	0xdb, 0x02, 0xa4, 0x46, 0xb9, 0x39, 0x8f, 0xcb, 0x4f, 0xb1, 0x44, 0x2e, 0x40, 0xc1, 0x2c, 0x1c,
+	0x6b, 0xd6, 0x9a, 0xdf, 0x5f, 0x3d, 0xa3, 0xb7, 0x40, 0x5a, 0xa4, 0xe2, 0x63, 0x2c, 0xd3, 0x8b,
+	0x57, 0x69, 0xc3, 0x6f, 0x61, 0x50, 0x7b, 0x46, 0x43, 0x68, 0x1d, 0xd9, 0x25, 0xdb, 0x58, 0x85,
+	0x68, 0x0c, 0x9d, 0xb3, 0x1f, 0x9d, 0xcc, 0xce, 0x1d, 0xcf, 0x24, 0xaf, 0xed, 0xb5, 0x45, 0x5c,
+	0x78, 0xb2, 0x61, 0x25, 0x9f, 0xd0, 0x84, 0x1e, 0xfb, 0x79, 0x62, 0x42, 0xaa, 0x36, 0x25, 0x93,
+	0xd9, 0xad, 0xe7, 0x99, 0x44, 0x8d, 0xf7, 0xa3, 0x48, 0x8f, 0xea, 0x7a, 0x2a, 0x24, 0xdf, 0x00,
+	0x37, 0x0d, 0x11, 0x09, 0x8f, 0x05, 0x43, 0x6f, 0xa0, 0x7f, 0xa8, 0xde, 0x94, 0x9f, 0xfa, 0xa8,
+	0xe1, 0x54, 0xaf, 0x06, 0x25, 0x0b, 0x18, 0x5f, 0x8d, 0xce, 0x57, 0x43, 0xd0, 0x56, 0xc8, 0xec,
+	0x48, 0x1d, 0x13, 0x17, 0x26, 0x35, 0x6c, 0xb6, 0xc1, 0xa2, 0x41, 0x68, 0x28, 0x55, 0xad, 0xea,
+	0x49, 0x5e, 0xc1, 0x60, 0xc3, 0xe4, 0x56, 0xfa, 0xb2, 0xe0, 0x22, 0xf0, 0xa0, 0x00, 0x7c, 0xde,
+	0xe7, 0x6a, 0x5c, 0xd5, 0xc8, 0xaf, 0x6a, 0x9b, 0x61, 0x7d, 0x01, 0x1d, 0xa1, 0xf2, 0x8c, 0x70,
+	0x4a, 0x6b, 0x00, 0xaa, 0x13, 0xe3, 0xa8, 0x41, 0xe2, 0x35, 0x40, 0x59, 0xbc, 0xcb, 0x47, 0xbb,
+	0xe2, 0xe3, 0xea, 0x8f, 0x05, 0xa3, 0xf2, 0x9b, 0xdd, 0xb2, 0xf4, 0x1c, 0x06, 0x0c, 0x7d, 0x01,
+	0x74, 0x6b, 0x0c, 0xc2, 0xf4, 0x9f, 0x96, 0xe3, 0x29, 0xfd, 0x8f, 0x93, 0xef, 0xe0, 0xe1, 0xd5,
+	0x2b, 0x9a, 0xd0, 0x26, 0x73, 0xf0, 0x63, 0xda, 0xec, 0xc3, 0x12, 0xba, 0xb9, 0x06, 0x68, 0x48,
+	0x6b, 0x32, 0xe3, 0x61, 0x5d, 0xa0, 0xa5, 0xf5, 0xbe, 0xfd, 0xdd, 0x4e, 0x76, 0xbb, 0x7b, 0xfa,
+	0xb7, 0x7c, 0xf9, 0x37, 0x00, 0x00, 0xff, 0xff, 0x93, 0x21, 0x63, 0x71, 0xbc, 0x03, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -250,6 +418,8 @@ const _ = grpc.SupportPackageIsVersion4
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type DockerHostServiceClient interface {
 	GetContainersCount(ctx context.Context, in *GetContainersCountRequest, opts ...grpc.CallOption) (*GetContainersCountResponse, error)
+	GetContainers(ctx context.Context, in *GetContainersRequest, opts ...grpc.CallOption) (*GetContainersResponse, error)
+	GetStats(ctx context.Context, in *GetStatsRequest, opts ...grpc.CallOption) (DockerHostService_GetStatsClient, error)
 }
 
 type dockerHostServiceClient struct {
@@ -269,9 +439,52 @@ func (c *dockerHostServiceClient) GetContainersCount(ctx context.Context, in *Ge
 	return out, nil
 }
 
+func (c *dockerHostServiceClient) GetContainers(ctx context.Context, in *GetContainersRequest, opts ...grpc.CallOption) (*GetContainersResponse, error) {
+	out := new(GetContainersResponse)
+	err := c.cc.Invoke(ctx, "/DockerHostService/GetContainers", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dockerHostServiceClient) GetStats(ctx context.Context, in *GetStatsRequest, opts ...grpc.CallOption) (DockerHostService_GetStatsClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_DockerHostService_serviceDesc.Streams[0], "/DockerHostService/GetStats", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &dockerHostServiceGetStatsClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type DockerHostService_GetStatsClient interface {
+	Recv() (*GetStatsReponse, error)
+	grpc.ClientStream
+}
+
+type dockerHostServiceGetStatsClient struct {
+	grpc.ClientStream
+}
+
+func (x *dockerHostServiceGetStatsClient) Recv() (*GetStatsReponse, error) {
+	m := new(GetStatsReponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // DockerHostServiceServer is the server API for DockerHostService service.
 type DockerHostServiceServer interface {
 	GetContainersCount(context.Context, *GetContainersCountRequest) (*GetContainersCountResponse, error)
+	GetContainers(context.Context, *GetContainersRequest) (*GetContainersResponse, error)
+	GetStats(*GetStatsRequest, DockerHostService_GetStatsServer) error
 }
 
 // UnimplementedDockerHostServiceServer can be embedded to have forward compatible implementations.
@@ -280,6 +493,12 @@ type UnimplementedDockerHostServiceServer struct {
 
 func (*UnimplementedDockerHostServiceServer) GetContainersCount(ctx context.Context, req *GetContainersCountRequest) (*GetContainersCountResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetContainersCount not implemented")
+}
+func (*UnimplementedDockerHostServiceServer) GetContainers(ctx context.Context, req *GetContainersRequest) (*GetContainersResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetContainers not implemented")
+}
+func (*UnimplementedDockerHostServiceServer) GetStats(req *GetStatsRequest, srv DockerHostService_GetStatsServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetStats not implemented")
 }
 
 func RegisterDockerHostServiceServer(s *grpc.Server, srv DockerHostServiceServer) {
@@ -304,6 +523,45 @@ func _DockerHostService_GetContainersCount_Handler(srv interface{}, ctx context.
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DockerHostService_GetContainers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetContainersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DockerHostServiceServer).GetContainers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/DockerHostService/GetContainers",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DockerHostServiceServer).GetContainers(ctx, req.(*GetContainersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DockerHostService_GetStats_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(GetStatsRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(DockerHostServiceServer).GetStats(m, &dockerHostServiceGetStatsServer{stream})
+}
+
+type DockerHostService_GetStatsServer interface {
+	Send(*GetStatsReponse) error
+	grpc.ServerStream
+}
+
+type dockerHostServiceGetStatsServer struct {
+	grpc.ServerStream
+}
+
+func (x *dockerHostServiceGetStatsServer) Send(m *GetStatsReponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 var _DockerHostService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "DockerHostService",
 	HandlerType: (*DockerHostServiceServer)(nil),
@@ -312,7 +570,17 @@ var _DockerHostService_serviceDesc = grpc.ServiceDesc{
 			MethodName: "GetContainersCount",
 			Handler:    _DockerHostService_GetContainersCount_Handler,
 		},
+		{
+			MethodName: "GetContainers",
+			Handler:    _DockerHostService_GetContainers_Handler,
+		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "GetStats",
+			Handler:       _DockerHostService_GetStats_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "docker-host.proto",
 }
