@@ -19,3 +19,14 @@ func GetContainersCount(c pb.DockerHostServiceClient, hosts *[]types.Host, all b
 	}
 	return convert.ToHostsViewModel(res, *hosts), nil
 }
+
+// GetContainers returns
+func GetContainers(c pb.DockerHostServiceClient, host string) (*[]vm.Container, error) {
+	res, err := c.GetContainers(context.Background(), convert.ToGetContainersRequest(host))
+	var containers []vm.Container
+	if err != nil {
+		log.Fatal(err)
+		return &containers, err
+	}
+	return convert.ToContainersViewModel(res), nil
+}

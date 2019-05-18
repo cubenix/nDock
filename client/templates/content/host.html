@@ -1,3 +1,169 @@
 {{ define "content" }}
-    <h1>This is host page</h1>
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">{{ .SelectedHost }}</h1>
+    </div>
+
+    <!-- Content Row -->
+    <div class="row">
+        <!-- Docker Stats -->
+        <div class="col-xl-12 col-lg-12 col-md-12">
+          <div class="card shadow mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+              <h6 class="m-0 font-weight-bold text-primary">Docker Stats</h6>
+              <div class="dropdown no-arrow">
+                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                  <div class="dropdown-header">Refresh Rate:</div>
+                  <a id="refresh-3sec" class="dropdown-item" style="color:#3a3b45; cursor: pointer;">3 sec</a>
+                  <a id="refresh-5sec" class="dropdown-item" style="color:#3a3b45; cursor: pointer;">5 sec</a>
+                  <a id="refresh-10sec" class="dropdown-item" style="color:#3a3b45; cursor: pointer;">10 sec</a>
+                  <a id="refresh-15sec" class="dropdown-item" style="color:#3a3b45; cursor: pointer;">15 sec</a>
+                </div>
+              </div>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body" style="height: 450px; width: -webkit-fill-available;">
+              <div class="chart-area" style="height: -webkit-fill-available; width: -webkit-fill-available;">
+                <canvas id="docker-stats-chart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>        
+    </div>
+
+    <script>
+        // Set new default font family and font color to mimic Bootstrap's default styling
+        Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+        Chart.defaults.global.defaultFontColor = '#858796';
+        var datasets = [];
+    </script>
+
+    {{ with .Containers }} 
+      {{ range . }}
+        <script>
+            var dataset = {
+            label: "{{ .Name }}",
+            data: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+            lineTension: 0.2,
+            backgroundColor: "{{ .ColorCode }}",
+            borderColor: "{{ .ColorCode }}",
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderWidth: 1.5,
+            borderJoinStyle: 'miter',
+            pointRadius: 0,
+            pointHitRadius: 10,
+            pointHoverBackgroundColor: "{{ .ColorCode }}",
+            pointHoverBorderColor: "{{ .ColorCode }}",
+            pointHoverBorderWidth: 2,    
+            fill:false,
+        };
+        datasets.push(dataset);
+        </script>
+      {{ end }}
+    {{ end }}
+
+{{ end }}
+
+{{ define "scripts" }}
+<script>
+    var ctx = document.getElementById("docker-stats-chart");
+    var data = {
+        labels: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+        datasets: datasets,
+    };
+
+    var options = {
+        showLines: true,
+        animation: false,
+        legend: {
+          display: true
+        },
+        maintainAspectRatio: false,
+        layout: {
+            padding: {
+                left: 10,
+                right: 25,
+                top: 25,
+                bottom: 0
+            }
+        },
+        scales: {
+            xAxes: [{
+                gridLines: {
+                  display: true,
+                  drawTicks: false
+                },
+                ticks: {
+                    fontSize: 10,
+                    maxRotation: 10,
+                    padding: 10
+                }
+            }],
+            yAxes: [{
+                scaleLabel: {
+                    display: true,
+                    labelString: 'CPU usage (%)'
+                },
+                ticks: {
+                    min: 0,
+                    stepSize: 50,
+                    padding: 10
+                },
+                gridLines: {
+                    color: "rgb(234, 236, 244)",
+                    zeroLineColor: "rgb(234, 236, 244)",
+                    drawBorder: false,
+                    borderDash: [2],
+                    zeroLineBorderDash: [2]
+                }
+            }],
+        },
+        
+        tooltips: {
+            backgroundColor: "rgb(255,255,255)",
+            bodyFontColor: "#858796",
+            titleMarginBottom: 10,
+            titleFontColor: '#6e707e',
+            titleFontSize: 14,
+            borderColor: '#dddfeb',
+            borderWidth: 1,
+            xPadding: 15,
+            yPadding: 15,
+            displayColors: false,
+            intersect: false,
+            mode: 'index',
+            caretPadding: 10,
+            callbacks: {
+                label: function(tooltipItem, chart) {
+                    var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+                    return datasetLabel + ': ' + tooltipItem.yLabel + "%";
+                }
+            }
+        }
+    };
+    var usage, cIndex = 0;
+
+    var statsLineChart = new Chart(ctx, {
+        type: 'line',
+        data: data,
+        options: options 
+    });
+
+    window.onload = function() {
+      document.getElementById("nav-dashboard").classList.remove("active");
+      document.getElementById("nav-docker-hosts").classList.add("active");
+      document.getElementById("{{ .SelectedHost }}-link").classList.add("active");
+      document.getElementById("nav-collapse-hosts").classList.remove("collapsed");
+      document.getElementById("collapseHosts").classList.add("show");
+      document.getElementById("nav-dashboard").classList.add("inactive");
+    };
+   
+</script>
+
 {{ end }}

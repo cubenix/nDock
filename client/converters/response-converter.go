@@ -2,6 +2,7 @@ package converters
 
 import (
 	vm "github.com/gauravgahlot/dockerdoodle/client/viewmodels"
+	"github.com/gauravgahlot/dockerdoodle/constants"
 	"github.com/gauravgahlot/dockerdoodle/pb"
 	"github.com/gauravgahlot/dockerdoodle/types"
 )
@@ -16,6 +17,19 @@ func ToHostsViewModel(r *pb.GetContainersCountResponse, hosts []types.Host) *[]v
 			ContainerCount: int(r.HostContainers[i].Containers[host.IP]),
 		}
 		res = append(res, h)
+	}
+	return &res
+}
+
+// ToContainersViewModel returns a collection of Container view model
+func ToContainersViewModel(r *pb.GetContainersResponse) *[]vm.Container {
+	res := []vm.Container{}
+	for i, c := range r.Containers {
+		res = append(res, vm.Container{
+			ID:        c.Id,
+			Name:      c.Name,
+			ColorCode: constants.BGCodes[i],
+		})
 	}
 	return &res
 }

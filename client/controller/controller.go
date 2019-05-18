@@ -22,7 +22,7 @@ func Startup(templates map[string]*template.Template, client *rpc.Client, hosts 
 
 	hostController.hostTemplate = templates["host.html"]
 	hostController.hosts = hosts
-	hostController.client = client.ContainerServiceClient
+	hostController.client = client.DockerServiceClient
 	hostController.registerRoutes()
 
 	http.Handle("/js/", http.FileServer(http.Dir("client/public")))

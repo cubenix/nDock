@@ -4,7 +4,9 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"strings"
 
+	"github.com/gauravgahlot/dockerdoodle/client/helpers"
 	"github.com/gauravgahlot/dockerdoodle/client/rpc"
 	"github.com/gauravgahlot/dockerdoodle/client/viewmodels"
 	"github.com/gauravgahlot/dockerdoodle/types"
@@ -13,25 +15,35 @@ import (
 type host struct {
 	hostTemplate *template.Template
 	hosts        *[]types.Host
-	client       rpc.ContainerServiceClient
+	client       rpc.DockerServiceClient
 }
 
 func (h host) registerRoutes() {
-	// http.HandleFunc("/hosts", h.handleHosts)
 	http.HandleFunc("/host/", h.handleHosts)
 }
 
-func (h host) handleHosts(w http.ResponseWriter, req *http.Request) {
-	log.Println("made it to the controller: ", req.URL.Path)
+func (h host) handleHosts(w http.ResponseWriter, r *http.Request) {
+	context := viewmodels.HostContainers{Hosts: []viewmodels.Host{}, SelectedHost: r.URL.Path[6:]}
+	context.Title = "Host Details"
 
-	context := viewmodels.DockerHost{Hosts: []viewmodels.Host{}}
-	context.Title = "Hosts"
+	var hostIP string
+	notFound := true
 	for _, s := range *h.hosts {
 		context.Hosts = append(context.Hosts, viewmodels.Host{Name: s.Name, IP: s.IP})
+		if notFound && strings.EqualFold(r.URL.Path[6:], s.Name) {
+			hostIP = s.IP
+			notFound = false
+		}
 	}
 
-	err := h.hostTemplate.Execute(w, context)
+	containers, err := helpers.GetContainers(h.client, hostIP)
 	if err != nil {
 		log.Fatal(err)
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+	context.Containers = *containers
+	tErr := h.hostTemplate.Execute(w, context)
+	if tErr != nil {
+		log.Fatal(tErr)
 	}
 }
