@@ -3,10 +3,8 @@ package apiwrapper
 import (
 	"context"
 	"encoding/json"
-	"io"
 	"io/ioutil"
 	"log"
-	"time"
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/client"
@@ -15,33 +13,34 @@ import (
 )
 
 var (
-	apiClient *client.Client
-	doneCh    = make(chan struct{})
+	// DoneCh is used to send a DONE signal
+	DoneCh = make(chan struct{})
+
+	// StatsCh holds the container stats
+	StatsCh = make(chan map[string]float32)
+
+	// DoneSignalSent some signal
+	DoneSignalSent = true
 )
 
-// InitializeClient initializes a new instance of the API Client
-func InitializeClient(host string) {
+// GetContainersCount returns the number of containers running on a host
+func GetContainersCount(host string, all bool) (int32, error) {
 	cli, err := client.NewClientWithOpts(client.WithHost(constants.DockerAPIProtocol+host+constants.DockerAPIPort), client.WithVersion(constants.DockerAPIVersion))
 	if err != nil {
 		log.Fatal(err)
 	}
-	apiClient = cli
-}
+	defer cli.Close()
 
-// GetContainersCount returns the number of containers running on a host
-func GetContainersCount(all bool) (int32, error) {
-	c, err := GetContainers(context.Background(), true, all)
+	c, err := getContainers(context.Background(), cli, true, all)
 	if err != nil {
 		log.Fatal(err)
 		return -1, err
 	}
-	defer apiClient.Close()
 	return int32(len(*c)), nil
 }
 
-// GetContainers returns containers running on a host
-func GetContainers(ctx context.Context, quite bool, all bool) (*[]types.Container, error) {
-	c, err := apiClient.ContainerList(ctx, types.ContainerListOptions{Quiet: quite, All: all})
+func getContainers(ctx context.Context, cli *client.Client, quite bool, all bool) (*[]types.Container, error) {
+	c, err := cli.ContainerList(ctx, types.ContainerListOptions{Quiet: quite, All: all})
 	if err != nil {
 		log.Fatal(err)
 		return &[]types.Container{}, err
@@ -49,44 +48,52 @@ func GetContainers(ctx context.Context, quite bool, all bool) (*[]types.Containe
 	return &c, nil
 }
 
-func containerStats(ctx context.Context, cli *client.Client, host string) {
-	c, _ := cli.ContainerList(ctx, types.ContainerListOptions{Quiet: true})
-	defer log.Println("closing containerStats")
-
-	go getDockerStats(ctx, cli, c[0].ID)
-	time.Sleep(5 * time.Second)
-	doneCh <- struct{}{}
+// GetContainers returns containers running on a host
+func GetContainers(host string, quite bool, all bool) (*[]types.Container, error) {
+	cli, err := client.NewClientWithOpts(client.WithHost(constants.DockerAPIProtocol+host+constants.DockerAPIPort),
+		client.WithVersion(constants.DockerAPIVersion))
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer cli.Close()
+	return getContainers(context.Background(), cli, quite, all)
 }
 
-func getDockerStats(ctx context.Context, cli *client.Client, id string) {
-	defer log.Println("closing getDockerStats")
+// GetDockerStats returns CPU usage of a container
+func GetDockerStats(ctx context.Context, host string, id string) {
+	cli, err := client.NewClientWithOpts(client.WithHost(constants.DockerAPIProtocol+host+constants.DockerAPIPort),
+		client.WithVersion(constants.DockerAPIVersion))
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	for {
 		select {
-		case <-doneCh:
-			log.Println("received DONE signal")
+		case <-DoneCh:
+			DoneSignalSent = true
+			cli.Close()
 			return
 		default:
-			getStats(ctx, cli, id)
+			if !DoneSignalSent {
+				getStats(ctx, cli, id)
+			}
 		}
 	}
 }
 
 func getStats(ctx context.Context, cli *client.Client, id string) {
 	s, e := cli.ContainerStats(ctx, id, false)
-	if e == io.EOF {
-		log.Println("EoF")
-	}
 	if e != nil {
 		log.Fatal(e)
 	}
-	defer func() {
-		log.Println("closing Body")
-		s.Body.Close()
-	}()
+	defer s.Body.Close()
 
 	d, _ := ioutil.ReadAll(s.Body)
 	var st types.Stats
 	json.Unmarshal(d, &st)
-	log.Println()
-	log.Println("CPU Usage", st.CPUStats.CPUUsage)
+
+	// TODO: calculate CPU utilization and push to channel
+	m := make(map[string]float32)
+	m[id] = float32(st.CPUStats.CPUUsage.TotalUsage)
+	StatsCh <- m
 }

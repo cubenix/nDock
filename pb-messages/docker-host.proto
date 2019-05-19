@@ -33,6 +33,7 @@ message GetContainersResponse {
 
 message GetStatsRequest {
     repeated string containerIds = 1;
+    string  host = 2;
 }
 
 message GetStatsReponse {

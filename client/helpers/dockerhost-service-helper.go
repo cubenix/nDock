@@ -2,6 +2,7 @@ package helpers
 
 import (
 	"context"
+	"io"
 	"log"
 
 	convert "github.com/gauravgahlot/dockerdoodle/client/converters"
@@ -22,11 +23,31 @@ func GetContainersCount(c pb.DockerHostServiceClient, hosts *[]types.Host, all b
 
 // GetContainers returns
 func GetContainers(c pb.DockerHostServiceClient, host string) (*[]vm.Container, error) {
-	res, err := c.GetContainers(context.Background(), convert.ToGetContainersRequest(host))
+	ctx := context.Background()
+	res, err := c.GetContainers(ctx, convert.ToGetContainersRequest(host))
 	var containers []vm.Container
 	if err != nil {
 		log.Fatal(err)
 		return &containers, err
 	}
-	return convert.ToContainersViewModel(res), nil
+	model, ids := convert.ToContainersViewModel(res)
+	go streamStats(ctx, c, host, ids)
+	return model, nil
+}
+
+func streamStats(ctx context.Context, c pb.DockerHostServiceClient, host string, ids *[]string) {
+	stream, err := c.GetStats(ctx, &pb.GetStatsRequest{Host: host, ContainerIds: *ids})
+	if err != nil {
+		log.Fatal(err)
+	}
+	for {
+		res, err := stream.Recv()
+		if err == io.EOF {
+			return
+		}
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Println("RES: ", res.Stats)
+	}
 }
