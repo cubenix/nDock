@@ -13,3 +13,8 @@ func ToGetContainersCountRequest(hosts *[]types.Host, all bool) *pb.GetContainer
 	}
 	return &req
 }
+
+// ToGetContainersRequest return ToGetContainersRequestObject
+func ToGetContainersRequest(host string) *pb.GetContainersRequest {
+	return &pb.GetContainersRequest{Host: host}
+}

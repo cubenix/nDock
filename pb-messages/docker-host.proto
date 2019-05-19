@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "container.proto";
+
 option go_package = "pb";
 
 message DockerHost {
@@ -21,6 +23,25 @@ message GetContainersCountResponse {
     repeated HostContainerCount hostContainers = 1;
 }
 
+message GetContainersRequest {
+    string host = 1;
+}
+
+message GetContainersResponse {
+    repeated Container containers = 1;
+}
+
+message GetStatsRequest {
+    repeated string containerIds = 1;
+    string  host = 2;
+}
+
+message GetStatsReponse {
+    map<string, float> stats = 1;
+}
+
 service DockerHostService {
     rpc GetContainersCount(GetContainersCountRequest) returns (GetContainersCountResponse);
+    rpc GetContainers(GetContainersRequest) returns (GetContainersResponse);
+    rpc GetStats(GetStatsRequest) returns (stream GetStatsReponse);
 }
