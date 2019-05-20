@@ -59,8 +59,8 @@ func (s *DockerHostService) GetStats(req *pb.GetStatsRequest, stream pb.DockerHo
 	api.DoneSignalSent = false
 	ctx := context.Background()
 
-	for _, id := range req.ContainerIds {
-		go api.GetDockerStats(ctx, req.Host, id)
+	for cID, cIndex := range req.Containers {
+		go api.GetDockerStats(ctx, req.Host, cID, cIndex)
 	}
 
 	for data := range api.StatsCh {

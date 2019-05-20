@@ -17,7 +17,7 @@ var (
 	DoneCh = make(chan struct{})
 
 	// StatsCh holds the container stats
-	StatsCh = make(chan map[string]float32)
+	StatsCh = make(chan map[int32]float32)
 
 	// DoneSignalSent some signal
 	DoneSignalSent = true
@@ -60,7 +60,7 @@ func GetContainers(host string, quite bool, all bool) (*[]types.Container, error
 }
 
 // GetDockerStats returns CPU usage of a container
-func GetDockerStats(ctx context.Context, host string, id string) {
+func GetDockerStats(ctx context.Context, host string, id string, cIndex int32) {
 	cli, err := client.NewClientWithOpts(client.WithHost(constants.DockerAPIProtocol+host+constants.DockerAPIPort),
 		client.WithVersion(constants.DockerAPIVersion))
 	if err != nil {
@@ -75,13 +75,13 @@ func GetDockerStats(ctx context.Context, host string, id string) {
 			return
 		default:
 			if !DoneSignalSent {
-				getStats(ctx, cli, id)
+				getStats(ctx, cli, id, cIndex)
 			}
 		}
 	}
 }
 
-func getStats(ctx context.Context, cli *client.Client, id string) {
+func getStats(ctx context.Context, cli *client.Client, id string, cIndex int32) {
 	s, e := cli.ContainerStats(ctx, id, false)
 	if e != nil {
 		log.Fatal(e)
@@ -92,8 +92,28 @@ func getStats(ctx context.Context, cli *client.Client, id string) {
 	var st types.Stats
 	json.Unmarshal(d, &st)
 
-	// TODO: calculate CPU utilization and push to channel
-	m := make(map[string]float32)
-	m[id] = float32(st.CPUStats.CPUUsage.TotalUsage)
+	m := map[int32]float32{
+		cIndex: cpuUsage(&st),
+	}
 	StatsCh <- m
+}
+
+func cpuUsage(stats *types.Stats) float32 {
+	cpu := stats.CPUStats.CPUUsage.TotalUsage
+	preCPU := stats.PreCPUStats.CPUUsage.TotalUsage
+	systemCPU := stats.CPUStats.SystemUsage
+	preSystemCPU := stats.PreCPUStats.SystemUsage
+	cpuCount := len(stats.PreCPUStats.CPUUsage.PercpuUsage)
+
+	// calculate the change for cpu usage of the container in between readings
+	cpuDelta := cpu - preCPU
+
+	// calculate the change for the entire system between readings
+	systemDelta := systemCPU - preSystemCPU
+
+	var usage float32
+	if systemDelta > 0 && cpuDelta > 0 {
+		usage = (float32(cpuDelta) / float32(systemDelta)) * float32(cpuCount) * float32(100)
+	}
+	return usage
 }
