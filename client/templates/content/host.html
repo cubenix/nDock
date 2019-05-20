@@ -71,7 +71,7 @@
 {{ end }}
 
 {{ define "scripts" }}
-<script>
+  <script>
     var ctx = document.getElementById("docker-stats-chart");
     var data = {
         labels: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
@@ -155,7 +155,40 @@
         options: options 
     });
 
-    window.onload = function() {
+    var socket = new WebSocket("ws://localhost:8000/ws");
+
+    function setupWebSocketConnection() { 
+      console.log("attempting connection...")
+
+      socket.onopen = () => {
+        console.log("connected successfull...");
+      }
+
+      socket.onclose = (error) => {
+        console.log("connection closed due to: ", error);
+      }
+
+      socket.onmessage = (msg) => {
+        let data = JSON.parse(msg.data);
+        cIndex = parseInt(data['index']);
+        usage = parseFloat(data['usage']);
+        statsLineChart.data.datasets[cIndex].data.push(usage);
+        statsLineChart.data.datasets[cIndex].data.shift();
+
+        var ctime = new Date ();
+        var csecs = moment(ctime).format("s");
+        if (csecs % 5 === 0) {
+            statsLineChart.data.labels.push(moment(ctime).format("mm:ss"));
+        } else {
+            statsLineChart.data.labels.push('');
+        }
+        statsLineChart.data.labels.shift();
+        statsLineChart.update();
+      }
+    }
+
+    window.onload = () => {
+      setupWebSocketConnection();
       document.getElementById("nav-dashboard").classList.remove("active");
       document.getElementById("nav-docker-hosts").classList.add("active");
       document.getElementById("{{ .SelectedHost }}-link").classList.add("active");
@@ -163,7 +196,7 @@
       document.getElementById("collapseHosts").classList.add("show");
       document.getElementById("nav-dashboard").classList.add("inactive");
     };
-   
-</script>
+
+  </script>
 
 {{ end }}

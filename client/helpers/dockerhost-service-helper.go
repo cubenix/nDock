@@ -9,7 +9,11 @@ import (
 	vm "github.com/gauravgahlot/dockerdoodle/client/viewmodels"
 	"github.com/gauravgahlot/dockerdoodle/pb"
 	"github.com/gauravgahlot/dockerdoodle/types"
+	"github.com/gorilla/websocket"
 )
+
+// WSConnection is a web socket connection
+var WSConnection *websocket.Conn
 
 // GetContainersCount gets response from gRPC server
 func GetContainersCount(c pb.DockerHostServiceClient, hosts *[]types.Host, all bool) (*[]vm.Host, error) {
@@ -30,24 +34,40 @@ func GetContainers(c pb.DockerHostServiceClient, host string) (*[]vm.Container, 
 		log.Fatal(err)
 		return &containers, err
 	}
-	model, ids := convert.ToContainersViewModel(res)
-	go streamStats(ctx, c, host, ids)
+	model, req := convert.ToContainersViewModel(res, host)
+	go streamStats(ctx, c, req)
 	return model, nil
 }
 
-func streamStats(ctx context.Context, c pb.DockerHostServiceClient, host string, ids *[]string) {
-	stream, err := c.GetStats(ctx, &pb.GetStatsRequest{Host: host, ContainerIds: *ids})
+func streamStats(ctx context.Context, c pb.DockerHostServiceClient, req *pb.GetStatsRequest) {
+	type streamData struct {
+		Index int32   `json:"index"`
+		Usage float32 `json:"usage"`
+	}
+
+	stream, err := c.GetStats(ctx, req)
 	if err != nil {
 		log.Fatal(err)
 	}
 	for {
 		res, err := stream.Recv()
 		if err == io.EOF {
+			log.Fatal("received EOF")
 			return
 		}
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("received ERROR: ", err)
 		}
-		log.Println("RES: ", res.Stats)
+
+		var data streamData
+		for i, d := range res.Stats {
+			data.Index = i
+			data.Usage = d
+		}
+
+		if err := WSConnection.WriteJSON(data); err != nil {
+			log.Fatal(err)
+			return
+		}
 	}
 }
