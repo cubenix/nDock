@@ -32,12 +32,12 @@ message GetContainersResponse {
 }
 
 message GetStatsRequest {
-    repeated string containerIds = 1;
+    map<string, int32> containers = 1;
     string  host = 2;
 }
 
 message GetStatsReponse {
-    map<string, float> stats = 1;
+    map<int32, float> stats = 1;
 }
 
 service DockerHostService {
