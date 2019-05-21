@@ -39,15 +39,6 @@ func GetContainersCount(host string, all bool) (int32, error) {
 	return int32(len(*c)), nil
 }
 
-func getContainers(ctx context.Context, cli *client.Client, quite bool, all bool) (*[]types.Container, error) {
-	c, err := cli.ContainerList(ctx, types.ContainerListOptions{Quiet: quite, All: all})
-	if err != nil {
-		log.Fatal(err)
-		return &[]types.Container{}, err
-	}
-	return &c, nil
-}
-
 // GetContainers returns containers running on a host
 func GetContainers(host string, quite bool, all bool) (*[]types.Container, error) {
 	cli, err := client.NewClientWithOpts(client.WithHost(constants.DockerAPIProtocol+host+constants.DockerAPIPort),
@@ -57,6 +48,15 @@ func GetContainers(host string, quite bool, all bool) (*[]types.Container, error
 	}
 	defer cli.Close()
 	return getContainers(context.Background(), cli, quite, all)
+}
+
+func getContainers(ctx context.Context, cli *client.Client, quite bool, all bool) (*[]types.Container, error) {
+	c, err := cli.ContainerList(ctx, types.ContainerListOptions{Quiet: quite, All: all})
+	if err != nil {
+		log.Fatal(err)
+		return &[]types.Container{}, err
+	}
+	return &c, nil
 }
 
 // GetDockerStats returns CPU usage of a container

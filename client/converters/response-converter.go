@@ -30,9 +30,44 @@ func ToContainersViewModel(r *pb.GetContainersResponse, host string) (*[]vm.Cont
 		res = append(res, vm.Container{
 			ID:        c.Id,
 			Name:      c.Name,
+			Image:     c.Image,
+			Command:   c.Command,
+			Created:   c.Created,
+			State:     c.State,
+			Status:    c.Status,
+			Ports:     *getPorts(c.Ports),
+			Mounts:    *getMounts(c.Mounts),
 			ColorCode: constants.BGCodes[i],
 		})
 		req.Containers[c.Id] = int32(i)
 	}
 	return &res, &req
+}
+
+func getPorts(ports []*pb.Port) *[]vm.Port {
+	ps := []vm.Port{}
+	for _, p := range ports {
+		ps = append(ps, vm.Port{
+			IP:          p.IP,
+			Type:        p.Type,
+			PrivatePort: p.PrivatePort,
+			PublicPort:  p.PublicPort,
+		})
+	}
+	return &ps
+}
+
+func getMounts(mounts []*pb.MountPoint) *[]vm.Mount {
+	ms := []vm.Mount{}
+	for _, m := range mounts {
+		ms = append(ms, vm.Mount{
+			Type:        m.Type,
+			Name:        m.Name,
+			Source:      m.Source,
+			Destination: m.Destination,
+			Mode:        m.Mode,
+			RW:          m.RW,
+		})
+	}
+	return &ms
 }
