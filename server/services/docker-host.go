@@ -7,6 +7,7 @@ import (
 
 	"github.com/gauravgahlot/dockerdoodle/pb"
 	api "github.com/gauravgahlot/dockerdoodle/server/api-wrapper"
+	convert "github.com/gauravgahlot/dockerdoodle/server/converter"
 )
 
 // DockerHostService is a gRPC service to serve requests for Docker Hosts
@@ -47,11 +48,8 @@ func (s *DockerHostService) GetContainers(ctx context.Context, req *pb.GetContai
 	if err != nil {
 		log.Fatal(err)
 	}
-	res := pb.GetContainersResponse{Containers: []*pb.Container{}}
-	for _, c := range *containers {
-		res.Containers = append(res.Containers, &pb.Container{Id: c.ID, Name: c.Names[0][1:]})
-	}
-	return &res, nil
+
+	return convert.ToGetContainersResponse(containers), nil
 }
 
 // GetStats sends containers stats to the client via a stream
