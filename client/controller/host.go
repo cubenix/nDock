@@ -9,21 +9,14 @@ import (
 	"github.com/gauravgahlot/dockerdoodle/client/helpers"
 	"github.com/gauravgahlot/dockerdoodle/client/rpc"
 	"github.com/gauravgahlot/dockerdoodle/client/viewmodels"
+	"github.com/gauravgahlot/dockerdoodle/client/ws"
 	"github.com/gauravgahlot/dockerdoodle/types"
-
-	"github.com/gorilla/websocket"
 )
 
 type host struct {
 	hostTemplate *template.Template
 	hosts        *[]types.Host
 	client       rpc.DockerServiceClient
-}
-
-var upgrader = websocket.Upgrader{
-	ReadBufferSize:  1024,
-	WriteBufferSize: 1024,
-	CheckOrigin:     func(r *http.Request) bool { return true },
 }
 
 func (h host) registerRoutes() {
@@ -58,10 +51,8 @@ func (h host) handleHosts(w http.ResponseWriter, r *http.Request) {
 }
 
 func wsEndpoint(w http.ResponseWriter, r *http.Request) {
-	conn, err := upgrader.Upgrade(w, r, nil)
-	if err != nil {
-		log.Fatal(err)
-		return
-	}
-	helpers.WSConnection = conn
+	hub := ws.NewHub()
+	go hub.Run()
+	ws.ServeWs(hub, w, r)
+	helpers.Hub = hub
 }

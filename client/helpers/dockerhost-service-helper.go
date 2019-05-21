@@ -2,18 +2,19 @@ package helpers
 
 import (
 	"context"
+	"encoding/json"
 	"io"
 	"log"
 
 	convert "github.com/gauravgahlot/dockerdoodle/client/converters"
 	vm "github.com/gauravgahlot/dockerdoodle/client/viewmodels"
+	"github.com/gauravgahlot/dockerdoodle/client/ws"
 	"github.com/gauravgahlot/dockerdoodle/pb"
 	"github.com/gauravgahlot/dockerdoodle/types"
-	"github.com/gorilla/websocket"
 )
 
-// WSConnection is a web socket connection
-var WSConnection *websocket.Conn
+// Hub is a hub of clients and channels
+var Hub *ws.Hub
 
 // GetContainersCount gets response from gRPC server
 func GetContainersCount(c pb.DockerHostServiceClient, hosts *[]types.Host, all bool) (*[]vm.Host, error) {
@@ -25,7 +26,7 @@ func GetContainersCount(c pb.DockerHostServiceClient, hosts *[]types.Host, all b
 	return convert.ToHostsViewModel(res, *hosts), nil
 }
 
-// GetContainers returns
+// GetContainers returns a pointer to collection of container view model
 func GetContainers(c pb.DockerHostServiceClient, host string) (*[]vm.Container, error) {
 	ctx := context.Background()
 	res, err := c.GetContainers(ctx, convert.ToGetContainersRequest(host))
@@ -65,9 +66,8 @@ func streamStats(ctx context.Context, c pb.DockerHostServiceClient, req *pb.GetS
 			data.Usage = d
 		}
 
-		if err := WSConnection.WriteJSON(data); err != nil {
-			log.Fatal(err)
-			return
+		if data, er := json.Marshal(data); er == nil {
+			Hub.Broadcast <- data
 		}
 	}
 }

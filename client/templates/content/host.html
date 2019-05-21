@@ -15,14 +15,7 @@
               <div class="dropdown no-arrow">
                 <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                  <div class="dropdown-header">Refresh Rate:</div>
-                  <a id="refresh-3sec" class="dropdown-item" style="color:#3a3b45; cursor: pointer;">3 sec</a>
-                  <a id="refresh-5sec" class="dropdown-item" style="color:#3a3b45; cursor: pointer;">5 sec</a>
-                  <a id="refresh-10sec" class="dropdown-item" style="color:#3a3b45; cursor: pointer;">10 sec</a>
-                  <a id="refresh-15sec" class="dropdown-item" style="color:#3a3b45; cursor: pointer;">15 sec</a>
-                </div>
+                </a>                
               </div>
             </div>
             <!-- Card Body -->
@@ -155,40 +148,39 @@
         options: options 
     });
 
-    var socket = new WebSocket("ws://localhost:8000/ws");
-
-    function setupWebSocketConnection() { 
-      console.log("attempting connection...")
-
-      socket.onopen = () => {
-        console.log("connected successfull...");
-      }
-
-      socket.onclose = (error) => {
-        console.log("connection closed due to: ", error);
-      }
-
-      socket.onmessage = (msg) => {
-        let data = JSON.parse(msg.data);
-        cIndex = parseInt(data['index']);
-        usage = parseFloat(data['usage']);
-        statsLineChart.data.datasets[cIndex].data.push(usage);
-        statsLineChart.data.datasets[cIndex].data.shift();
-
-        var ctime = new Date ();
-        var csecs = moment(ctime).format("s");
-        if (csecs % 5 === 0) {
-            statsLineChart.data.labels.push(moment(ctime).format("mm:ss"));
-        } else {
-            statsLineChart.data.labels.push('');
-        }
-        statsLineChart.data.labels.shift();
-        statsLineChart.update();
-      }
-    }
-
+    var conn;
     window.onload = () => {
-      setupWebSocketConnection();
+
+      if (window["WebSocket"]) {
+        conn = new WebSocket("ws://localhost:8000/ws");
+
+        conn.onopen = () => {
+          console.log("connected successfully...");
+        }
+        
+        conn.onclose = (error) => {
+          console.log("connection closed due to: ", error);
+        }
+        
+        conn.onmessage = (msg) => {
+          let data = JSON.parse(msg.data);
+          cIndex = parseInt(data['index']);
+          usage = parseFloat(data['usage']);
+          statsLineChart.data.datasets[cIndex].data.push(usage);
+          statsLineChart.data.datasets[cIndex].data.shift();
+
+          var ctime = new Date ();
+          var csecs = moment(ctime).format("s");
+          if (csecs % 5 === 0) {
+              statsLineChart.data.labels.push(moment(ctime).format("mm:ss"));
+          } else {
+              statsLineChart.data.labels.push('');
+          }
+          statsLineChart.data.labels.shift();
+          statsLineChart.update();
+        }
+      }
+
       document.getElementById("nav-dashboard").classList.remove("active");
       document.getElementById("nav-docker-hosts").classList.add("active");
       document.getElementById("{{ .SelectedHost }}-link").classList.add("active");
