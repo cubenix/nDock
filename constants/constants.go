@@ -15,6 +15,9 @@ const DockerAPIProtocol = "tcp://"
 // DockerAPIVersion is the default API version used while creating a Docker client
 const DockerAPIVersion = "v1.38"
 
+// ContainerRunning is the running state of a container
+const ContainerRunning = "running"
+
 // BGClasses is a set background classes
 var BGClasses = [6]string{
 	bgPrimary,

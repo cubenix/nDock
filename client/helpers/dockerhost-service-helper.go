@@ -35,7 +35,7 @@ func GetContainers(c pb.DockerHostServiceClient, host string) (*[]vm.Container, 
 		log.Fatal(err)
 		return &containers, err
 	}
-	model, req := convert.ToContainersViewModel(res, host)
+	model, req := convert.ToContainersViewModelAndGetStatsRequest(res, host)
 	go streamStats(ctx, c, req)
 	return model, nil
 }

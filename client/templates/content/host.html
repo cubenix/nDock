@@ -30,10 +30,10 @@
         var datasets = [];
     </script>
 
-    {{ with .Containers }} 
+    {{ with .RunningContainers }} 
       {{ range . }}
         <script>
-            var dataset = {
+          var dataset = {
             label: "{{ .Name }}",
             data: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
             lineTension: 0.2,
@@ -50,15 +50,15 @@
             pointHoverBorderColor: "{{ .ColorCode }}",
             pointHoverBorderWidth: 2,    
             fill:false,
-        };
-        datasets.push(dataset);
-        </script>
+          };
+          datasets.push(dataset);
+        </script> 
       {{ end }}
     {{ end }}
 
     <!-- Few important Container details -->
     <div class="row">
-      {{ with .Containers }} 
+      {{ with .AllContainers }} 
         {{ range . }}
           <div class="col-lg-4">
             <div class="card mb-4">
@@ -175,9 +175,7 @@
       if (window["WebSocket"]) {
         conn = new WebSocket("ws://localhost:8000/ws");
 
-        conn.onopen = () => {
-          console.log("connected successfully...");
-        }
+        conn.onopen = () => {}
         
         conn.onclose = (error) => {
           console.log("connection closed due to: ", error);

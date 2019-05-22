@@ -10,6 +10,7 @@ import (
 	"github.com/gauravgahlot/dockerdoodle/client/rpc"
 	"github.com/gauravgahlot/dockerdoodle/client/viewmodels"
 	"github.com/gauravgahlot/dockerdoodle/client/ws"
+	"github.com/gauravgahlot/dockerdoodle/constants"
 	"github.com/gauravgahlot/dockerdoodle/types"
 )
 
@@ -43,7 +44,12 @@ func (h host) handleHosts(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 		w.WriteHeader(http.StatusInternalServerError)
 	}
-	context.Containers = *containers
+	context.AllContainers = *containers
+	for _, c := range *containers {
+		if c.State == constants.ContainerRunning {
+			context.RunningContainers = append(context.RunningContainers, c)
+		}
+	}
 	tErr := h.hostTemplate.Execute(w, context)
 	if tErr != nil {
 		log.Fatal(tErr)

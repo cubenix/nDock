@@ -21,12 +21,13 @@ func ToHostsViewModel(r *pb.GetContainersCountResponse, hosts []types.Host) *[]v
 	return &res
 }
 
-// ToContainersViewModel returns pointers to collection of Container view model and GetStatsRequest
-func ToContainersViewModel(r *pb.GetContainersResponse, host string) (*[]vm.Container, *pb.GetStatsRequest) {
+// ToContainersViewModelAndGetStatsRequest returns pointers to collection of Container view model and GetStatsRequest
+func ToContainersViewModelAndGetStatsRequest(r *pb.GetContainersResponse, host string) (*[]vm.Container, *pb.GetStatsRequest) {
 	res := []vm.Container{}
 	req := pb.GetStatsRequest{Host: host, Containers: map[string]int32{}}
+	cIndex := 0
 
-	for i, c := range r.Containers {
+	for _, c := range r.Containers {
 		res = append(res, vm.Container{
 			ID:        c.Id,
 			Name:      c.Name,
@@ -37,9 +38,13 @@ func ToContainersViewModel(r *pb.GetContainersResponse, host string) (*[]vm.Cont
 			Status:    c.Status,
 			Ports:     *getPorts(c.Ports),
 			Mounts:    *getMounts(c.Mounts),
-			ColorCode: constants.BGCodes[i],
+			ColorCode: constants.BGCodes[cIndex],
 		})
-		req.Containers[c.Id] = int32(i)
+
+		if c.State == constants.ContainerRunning {
+			req.Containers[c.Id] = int32(cIndex)
+			cIndex++
+		}
 	}
 	return &res, &req
 }
