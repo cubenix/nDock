@@ -69,10 +69,26 @@
                 <!-- Card Content - Collapse -->
                 <div class="collapse show" id="collapseCardExample-{{.Name}}">
                   <div class="card-body">
-                    <div><strong>Image: </strong> {{ .Image }}</div>
-                    <div><strong>Command: </strong> {{ .Command }}</div>
-                    <div><strong>State: </strong> {{ .State }}</div>
-                    <div><strong>Status: </strong> {{ .Status }}</div>
+                    <div>
+                      <strong>Image: </strong>
+                      <span>{{ .Image }}</span>
+                    </div>
+                    <div>
+                      <strong>Command: </strong>
+                      <span>{{ .Command }}</span>
+                    </div>
+                    <div>
+                      <strong>State: </strong>
+                      {{ if eq .State "exited" }}
+                        <span style="color: red">{{ .State }}</span>
+                      {{ else }}
+                        <span style="color: darkgreen">{{ .State }}</span>
+                      {{ end }}
+                    </div>
+                    <div>
+                      <strong>Status: </strong>
+                      <span>{{ .Status }}</span>
+                    </div>
                   </div>
                 </div>
             </div> 
