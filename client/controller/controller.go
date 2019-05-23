@@ -27,6 +27,7 @@ func Startup(templates map[string]*template.Template, client *rpc.Client, hosts 
 	hostController.registerRoutes()
 
 	containerController.containerTemplate = templates["container.html"]
+	containerController.hosts = hosts
 	containerController.client = client.ContainerServiceClient
 	containerController.registerRoutes()
 

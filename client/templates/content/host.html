@@ -19,9 +19,10 @@
 {{ end }}
 
 {{ define "content" }}
+    {{ $selectedHost := .SelectedHost }}
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">{{ .SelectedHost }}</h1>
+        <h1 class="h3 mb-0 text-gray-800">{{ $selectedHost }}</h1>
     </div>
 
     <!-- Content Row -->
@@ -47,6 +48,7 @@
         // Set new default font family and font color to mimic Bootstrap's default styling
         Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
         Chart.defaults.global.defaultFontColor = '#858796';
+        var selectedHost = '{{ .SelectedHost }}';
         var datasets = [];
     </script>
 
@@ -114,6 +116,7 @@
                     <div style="float: right">
                       <form method="post" action="/container/{{ .Name }}" class="inline">
                         <input type="hidden" name="containerID" value="{{ .ID }}">
+                        <input type="hidden" name="host" value="{{ $selectedHost }}">
                         <button type="submit" value="submit" class="link-button">
                           more 
                         </button>

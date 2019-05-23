@@ -28,7 +28,7 @@ func ToContainersViewModelAndGetStatsRequest(r *pb.GetContainersResponse, host s
 	cIndex := 0
 
 	for _, c := range r.Containers {
-		ct := getContainer(c)
+		ct := ToContainerViewModel(c)
 		ct.ColorCode = constants.BGCodes[cIndex]
 		res = append(res, *ct)
 
@@ -40,7 +40,8 @@ func ToContainersViewModelAndGetStatsRequest(r *pb.GetContainersResponse, host s
 	return &res, &req
 }
 
-func getContainer(c *pb.Container) *vm.Container {
+// ToContainerViewModel returns a struct of Container view model
+func ToContainerViewModel(c *pb.Container) *vm.Container {
 	return &vm.Container{
 		ID:      c.Id,
 		Name:    c.Name,
