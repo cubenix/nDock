@@ -3,5 +3,6 @@ package viewmodels
 // ContainerDetails is the view model for container details page
 type ContainerDetails struct {
 	Base
-	Container Container
+	Container    Container
+	SelectedHost string
 }

@@ -24,8 +24,13 @@ func (c container) registerRoutes() {
 }
 
 func (c container) handleContainerDetails(w http.ResponseWriter, r *http.Request) {
+	ctx := viewmodels.ContainerDetails{SelectedHost: r.FormValue("host")}
+	ctx.Title = "Container Details"
+	ctx.Hosts = []viewmodels.Host{}
+
 	var hostIP string
 	for _, h := range *c.hosts {
+		ctx.Hosts = append(ctx.Hosts, viewmodels.Host{Name: h.Name, IP: h.IP})
 		if strings.EqualFold(h.Name, r.FormValue("host")) {
 			hostIP = h.IP
 			break
@@ -36,9 +41,6 @@ func (c container) handleContainerDetails(w http.ResponseWriter, r *http.Request
 		log.Fatal(err)
 		w.WriteHeader(http.StatusNotFound)
 	}
-
-	ctx := viewmodels.ContainerDetails{}
 	ctx.Container = *res
-	ctx.Title = "Container Details"
 	c.containerTemplate.Execute(w, ctx)
 }

@@ -26,7 +26,8 @@ func (h host) registerRoutes() {
 }
 
 func (h host) handleHosts(w http.ResponseWriter, r *http.Request) {
-	context := viewmodels.HostContainers{Hosts: []viewmodels.Host{}, SelectedHost: r.URL.Path[6:]}
+	context := viewmodels.HostContainers{SelectedHost: r.URL.Path[6:]}
+	context.Hosts = []viewmodels.Host{}
 	context.Title = "Host Details"
 
 	var hostIP string
