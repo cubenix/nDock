@@ -28,18 +28,9 @@ func ToContainersViewModelAndGetStatsRequest(r *pb.GetContainersResponse, host s
 	cIndex := 0
 
 	for _, c := range r.Containers {
-		res = append(res, vm.Container{
-			ID:        c.Id,
-			Name:      c.Name,
-			Image:     c.Image,
-			Command:   c.Command,
-			Created:   c.Created,
-			State:     c.State,
-			Status:    c.Status,
-			Ports:     *getPorts(c.Ports),
-			Mounts:    *getMounts(c.Mounts),
-			ColorCode: constants.BGCodes[cIndex],
-		})
+		ct := getContainer(c)
+		ct.ColorCode = constants.BGCodes[cIndex]
+		res = append(res, *ct)
 
 		if c.State == constants.ContainerRunning {
 			req.Containers[c.Id] = int32(cIndex)
@@ -47,6 +38,20 @@ func ToContainersViewModelAndGetStatsRequest(r *pb.GetContainersResponse, host s
 		}
 	}
 	return &res, &req
+}
+
+func getContainer(c *pb.Container) *vm.Container {
+	return &vm.Container{
+		ID:      c.Id,
+		Name:    c.Name,
+		Image:   c.Image,
+		Command: c.Command,
+		Created: c.Created,
+		State:   c.State,
+		Status:  c.Status,
+		Ports:   *getPorts(c.Ports),
+		Mounts:  *getMounts(c.Mounts),
+	}
 }
 
 func getPorts(ports []*pb.Port) *[]vm.Port {
