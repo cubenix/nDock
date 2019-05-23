@@ -101,6 +101,8 @@
                       <strong>State: </strong>
                       {{ if eq .State "exited" }}
                         <span style="color: red">{{ .State }}</span>
+                      {{ else if eq .State "created" }}
+                        <span style="color: #f6b23f">{{ .State }}</span>
                       {{ else }}
                         <span style="color: darkgreen">{{ .State }}</span>
                       {{ end }}
