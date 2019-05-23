@@ -31,7 +31,8 @@ message Container {
 }
 
 message GetContainerRequest {
-    string id = 1;
+    string iD = 1;
+    string host = 2;
 }
 
 message GetContainerResponse {
