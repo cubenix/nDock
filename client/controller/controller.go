@@ -9,8 +9,9 @@ import (
 )
 
 var (
-	homeController home
-	hostController host
+	homeController      home
+	hostController      host
+	containerController container
 )
 
 // Startup registers all the HTTP request handlers
@@ -24,6 +25,10 @@ func Startup(templates map[string]*template.Template, client *rpc.Client, hosts 
 	hostController.hosts = hosts
 	hostController.client = client.DockerServiceClient
 	hostController.registerRoutes()
+
+	containerController.containerTemplate = templates["container.html"]
+	containerController.client = client.ContainerServiceClient
+	containerController.registerRoutes()
 
 	http.Handle("/js/", http.FileServer(http.Dir("client/public")))
 	http.Handle("/vendor/", http.FileServer(http.Dir("client/public")))

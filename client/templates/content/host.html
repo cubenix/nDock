@@ -1,3 +1,23 @@
+{{ define "styles" }}
+  <style>
+    .inline {
+      display: inline;
+    }
+    .link-button {
+      background-color: transparent;
+      border: none;
+      color:#4e73df;
+      cursor: pointer;
+    }
+    .link-button:focus {
+      outline: none;      
+    }
+    .link-button:hover {
+      text-decoration: underline;
+    }
+  </style>
+{{ end }}
+
 {{ define "content" }}
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -89,8 +109,16 @@
                       <strong>Status: </strong>
                       <span>{{ .Status }}</span>
                     </div>
-                  </div>
-                </div>
+                    <div style="float: right">
+                      <form method="post" action="/container/{{ .Name }}" class="inline">
+                        <input type="hidden" name="containerID" value="{{ .ID }}">
+                        <button type="submit" value="submit" class="link-button">
+                          more 
+                        </button>
+                      </form>
+                    </div>                    
+                  </div>                  
+                </div>                
             </div> 
           </div>
         {{ end }}
