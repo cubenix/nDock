@@ -39,6 +39,22 @@ message GetContainerResponse {
     Container container = 1;
 }
 
+message StartContainerRequest {
+    string iD = 1;
+    string host = 2;
+}
+
+message StopContainerRequest {
+    string iD = 1;
+    string host = 2;
+}
+
+message ErrorStatus {
+    string message = 1;
+}
+
 service ContainerService {
     rpc GetContainer (GetContainerRequest) returns (GetContainerResponse);
+    rpc StartContainer (StartContainerRequest) returns (ErrorStatus);
+    rpc StopContainer (StopContainerRequest) returns (ErrorStatus);
 }

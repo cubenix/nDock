@@ -44,7 +44,7 @@ func (s *DockerHostService) GetContainers(ctx context.Context, req *pb.GetContai
 		api.DoneCh <- struct{}{}
 		api.DoneSignalSent = true
 	}
-	containers, err := api.GetContainers(req.Host, false, true)
+	containers, err := api.GetContainers(ctx, req.Host, false, true)
 	if err != nil {
 		log.Fatal(err)
 	}

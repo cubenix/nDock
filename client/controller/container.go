@@ -1,9 +1,16 @@
 package controller
 
 import (
+	"context"
+	"encoding/json"
 	"html/template"
+	"log"
+	"net/http"
+	"strings"
 
+	"github.com/gauravgahlot/dockerdoodle/client/helpers"
 	"github.com/gauravgahlot/dockerdoodle/client/rpc"
+	vm "github.com/gauravgahlot/dockerdoodle/client/viewmodels"
 	"github.com/gauravgahlot/dockerdoodle/types"
 )
 
@@ -14,5 +21,45 @@ type container struct {
 }
 
 func (c container) registerRoutes() {
+	http.HandleFunc("/container/start", c.startContainer)
+}
 
+func (c container) startContainer(w http.ResponseWriter, r *http.Request) {
+	var req vm.ContainerOperationRequest
+	decErr := json.NewDecoder(r.Body).Decode(&req)
+	if decErr != nil {
+		log.Fatal("Invalid Request: ", decErr)
+		w.WriteHeader(http.StatusBadRequest)
+	}
+	var hostIP string
+	for _, s := range *c.hosts {
+		if strings.EqualFold(req.ID, s.Name) {
+			hostIP = s.IP
+			break
+		}
+	}
+	err := helpers.StartContainer(context.Background(), c.client, hostIP, req.ID)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func (c container) stopContainer(w http.ResponseWriter, r *http.Request) {
+	var req vm.ContainerOperationRequest
+	decErr := json.NewDecoder(r.Body).Decode(&req)
+	if decErr != nil {
+		log.Fatal("Invalid Request: ", decErr)
+		w.WriteHeader(http.StatusBadRequest)
+	}
+	var hostIP string
+	for _, s := range *c.hosts {
+		if strings.EqualFold(req.ID, s.Name) {
+			hostIP = s.IP
+			break
+		}
+	}
+	err := helpers.StopContainer(context.Background(), c.client, hostIP, req.ID)
+	if err != nil {
+		log.Fatal(err)
+	}
 }

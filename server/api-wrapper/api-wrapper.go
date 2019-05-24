@@ -40,14 +40,14 @@ func GetContainersCount(host string, all bool) (int32, error) {
 }
 
 // GetContainers returns containers running on a host
-func GetContainers(host string, quite bool, all bool) (*[]types.Container, error) {
+func GetContainers(ctx context.Context, host string, quite bool, all bool) (*[]types.Container, error) {
 	cli, err := client.NewClientWithOpts(client.WithHost(constants.DockerAPIProtocol+host+constants.DockerAPIPort),
 		client.WithVersion(constants.DockerAPIVersion))
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer cli.Close()
-	return getContainers(context.Background(), cli, quite, all)
+	return getContainers(ctx, cli, quite, all)
 }
 
 func getContainers(ctx context.Context, cli *client.Client, quite bool, all bool) (*[]types.Container, error) {
@@ -116,4 +116,25 @@ func cpuUsage(stats *types.Stats) float32 {
 		usage = (float32(cpuDelta) / float32(systemDelta)) * float32(cpuCount) * float32(100)
 	}
 	return usage
+}
+
+// StartContainer starts a stopped or created container
+func StartContainer(ctx context.Context, host string, id string) error {
+	cli, err := client.NewClientWithOpts(client.WithHost(constants.DockerAPIProtocol+host+constants.DockerAPIPort),
+		client.WithVersion(constants.DockerAPIVersion))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return cli.ContainerStart(ctx, id, types.ContainerStartOptions{})
+}
+
+// StopContainer starts a stopped or created container
+func StopContainer(ctx context.Context, host string, id string) error {
+	cli, err := client.NewClientWithOpts(client.WithHost(constants.DockerAPIProtocol+host+constants.DockerAPIPort),
+		client.WithVersion(constants.DockerAPIVersion))
+	if err != nil {
+		log.Fatal(err)
+	}
+	return cli.ContainerStop(ctx, id, nil)
 }
