@@ -39,6 +39,26 @@
       </div>
     </li>
 
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <!-- Nav Item - Containers -->
+    <li class="nav-item" id="nav-containers">
+      <a id="nav-collapse-hosts" class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseContainers" aria-expanded="true" aria-controls="collapseHosts">
+        <i class="fas fa-fw fa-archive"></i>
+        <span>Docker Containers</span>
+      </a>
+      <div id="collapseContainers" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          {{ with .Hosts }}
+            {{ range . }}
+              <a id="{{ .Name}}-containers-link" class="collapse-item" href="/host/containers/{{ .Name }}">{{ .Name }}</a> 
+            {{ end }}
+          {{ end }}          
+        </div>
+      </div>
+    </li>
+
     <!-- Divider for toggle -->
     <hr class="sidebar-divider d-none d-md-block">
 

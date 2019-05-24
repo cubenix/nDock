@@ -1,0 +1,97 @@
+{{ define "styles" }}
+  <style>
+    .inline {
+      display: inline;
+    }
+    .link-button {
+      background-color: transparent;
+      border: none;
+      color:#4e73df;
+      cursor: pointer;
+    }
+    .link-button:focus {
+      outline: none;      
+    }
+    .link-button:hover {
+      text-decoration: underline;
+    }
+  </style>
+{{ end }}
+
+{{ define "content" }}
+    {{ $selectedHost := .SelectedHost }}
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">{{ $selectedHost }}</h1>
+    </div>
+
+    <!-- Few important Container details -->
+    <div class="row">
+      {{ with .AllContainers }} 
+        {{ range . }}
+          <div class="col-lg-4">
+            <div class="card mb-4">
+                <!-- Card Header - Accordion -->
+                <a href="#collapseCardExample-{{.Name}}" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample-{{.Name}}">
+                  <h6 class="m-0 font-weight-bold text-primary">{{ .Name }}</h6>
+                </a>
+                <!-- Card Content - Collapse -->
+                <div class="collapse show" id="collapseCardExample-{{.Name}}">
+                  <div class="card-body">
+                    <div>
+                      <strong>Image: </strong>
+                      <span>{{ .Image }}</span>
+                    </div>
+                    <div>
+                      <strong>Command: </strong>
+                      <span>{{ .Command }}</span>
+                    </div>
+                    <div>
+                      <strong>State: </strong>
+                      {{ if eq .State "exited" }}
+                        <span style="color: red">{{ .State }}</span>
+                      {{ else if eq .State "created" }}
+                        <span style="color: #f6b23f">{{ .State }}</span>
+                      {{ else }}
+                        <span style="color: darkgreen">{{ .State }}</span>
+                      {{ end }}
+                    </div>
+                    <div>
+                      <strong>Status: </strong>
+                      <span>{{ .Status }}</span>
+                    </div>
+                    <div style="float: right">
+                      <form method="post" action="/container/{{ .Name }}" class="inline">
+                        <input type="hidden" name="containerID" value="{{ .ID }}">
+                        <input type="hidden" name="host" value="{{ $selectedHost }}">
+                        <button type="submit" value="submit" class="link-button">
+                          more 
+                        </button>
+                      </form>
+                    </div>                    
+                  </div>                  
+                </div>                
+            </div> 
+          </div>
+        {{ end }}
+      {{ end }}
+    </div>
+
+{{ end }}
+
+{{ define "scripts" }}
+  <script>
+    window.onload = () => {
+        document.getElementById("nav-dashboard").classList.remove("active");
+        document.getElementById("nav-docker-hosts").classList.remove("active");
+        document.getElementById("nav-dashboard").classList.add("inactive");
+        document.getElementById("nav-docker-hosts").classList.add("inactive");
+        document.getElementById("nav-containers").classList.add("active");
+        document.getElementById("nav-collapse-hosts").classList.add("collapsed");
+        document.getElementById("nav-collapse-containers").classList.remove("collapsed");
+        document.getElementById("collapseContainers").classList.add("show");
+        document.getElementById("{{ .SelectedHost }}-containers-link").classList.add("active");
+    };
+  </script>
+{{ end }}
+
