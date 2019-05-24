@@ -1,19 +1,9 @@
 {{ define "styles" }}
   <style>
-    .inline {
-      display: inline;
-    }
-    .link-button {
-      background-color: transparent;
-      border: none;
-      color:#4e73df;
-      cursor: pointer;
-    }
-    .link-button:focus {
-      outline: none;      
-    }
-    .link-button:hover {
-      text-decoration: underline;
+    li.borderless {
+      border-top: 0 none;
+      border-bottom: 0 none; 
+      padding: 0rem .75rem 0.25rem
     }
   </style>
 {{ end }}
@@ -29,8 +19,8 @@
     <div class="row">
       {{ with .AllContainers }} 
         {{ range . }}
-          <div class="col-lg-4">
-            <div class="card mb-4">
+          <div class="col-xl-6 col-lg-6 col-md-6">
+            <div class="card shadow mb-4">
                 <!-- Card Header - Accordion -->
                 <a href="#collapseCardExample-{{.Name}}" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample-{{.Name}}">
                   <h6 class="m-0 font-weight-bold text-primary">{{ .Name }}</h6>
@@ -47,6 +37,44 @@
                       <span>{{ .Command }}</span>
                     </div>
                     <div>
+                      <strong>Port Mapping : </strong>                                           
+                    </div>
+                    <ul class="list-group list-group-flush">
+                      {{ with .Ports }}
+                        {{ range . }}
+                          <li class="borderless list-group-item">{{.IP}}:{{.PublicPort}} -> {{.PrivatePort}}/<strong>{{.Type}}</strong></li>
+                        {{ end }}
+                      {{ end }} 
+                    </ul>
+                    <div>
+                      <strong>Mounts: </strong>
+                      <ul class="list-group list-group-flush">
+                          {{ with .Mounts }}
+                            {{ range . }}
+                              <li class="borderless list-group-item mount-point" style="border-radius: 0.35rem; border-left: 1.2px solid rgba(0,0,0,.125); border-right: 1px solid rgba(0,0,0,.125);">
+                                <ul class="list-group">
+                                  <li class="borderless list-group-item">
+                                    <strong>Type: </strong><span>{{.Type}}</span>                                  
+                                  </li>
+                                  <li class="borderless list-group-item">
+                                    <strong>Name: </strong><span>{{.Name}}</span>  
+                                  </li>  
+                                  <li class="borderless list-group-item">
+                                    <strong>Source: </strong><span>{{.Source}}</span>  
+                                  </li>
+                                  <li class="borderless list-group-item">
+                                    <strong>Destination: </strong><span>{{.Destination}}</span>  
+                                  </li>
+                                  <li class="borderless list-group-item">
+                                    <strong>Read/Write: </strong><span>{{.RW}}</span>  
+                                  </li>
+                                </ul>
+                              </li>                            
+                            {{ end }}
+                          {{ end }} 
+                        </ul>
+                        </div>
+                    <div>
                       <strong>State: </strong>
                       {{ if eq .State "exited" }}
                         <span style="color: red">{{ .State }}</span>
@@ -60,14 +88,25 @@
                       <strong>Status: </strong>
                       <span>{{ .Status }}</span>
                     </div>
-                    <div style="float: right">
-                      <form method="post" action="/container/{{ .Name }}" class="inline">
-                        <input type="hidden" name="containerID" value="{{ .ID }}">
-                        <input type="hidden" name="host" value="{{ $selectedHost }}">
-                        <button type="submit" value="submit" class="link-button">
-                          more 
-                        </button>
-                      </form>
+                    <div style="float: right; margin-bottom: 0.5rem;">
+                      <a href="#" class="btn btn-sm btn-success btn-icon-split">
+                        <span class="icon text-white-50">
+                          <i class="fas fa-check"></i>
+                        </span>
+                        <span class="text">Start</span>
+                      </a>
+                      <a href="#" class="btn btn-sm btn-warning btn-icon-split">
+                        <span class="icon text-white-50">
+                          <i class="fas fa-exclamation-triangle"></i>
+                        </span>
+                        <span class="text">Stop</span>
+                      </a>
+                      <a href="#" class="btn btn-sm btn-danger btn-icon-split">
+                        <span class="icon text-white-50">
+                          <i class="fas fa-trash"></i>
+                        </span>
+                        <span class="text">Remove</span>
+                      </a>
                     </div>                    
                   </div>                  
                 </div>                
