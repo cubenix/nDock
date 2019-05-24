@@ -114,13 +114,7 @@
                       <span>{{ .Status }}</span>
                     </div>
                     <div style="float: right">
-                      <form method="post" action="/container/{{ .Name }}" class="inline">
-                        <input type="hidden" name="containerID" value="{{ .ID }}">
-                        <input type="hidden" name="host" value="{{ $selectedHost }}">
-                        <button type="submit" value="submit" class="link-button">
-                          more 
-                        </button>
-                      </form>
+                      <a href="/host/containers/{{$selectedHost}}">more</a>
                     </div>                    
                   </div>                  
                 </div>                
