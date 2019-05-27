@@ -27,19 +27,19 @@ func GetContainersCount(c pb.DockerHostServiceClient, hosts *[]types.Host, all b
 }
 
 // GetContainers returns a pointer to collection of container view model
-func GetContainers(c pb.DockerHostServiceClient, host string, stats bool) (*[]vm.Container, error) {
+func GetContainers(c pb.DockerHostServiceClient, host string, stats bool) (*[]vm.Container, *[]vm.Container, error) {
 	ctx := context.Background()
 	res, err := c.GetContainers(ctx, convert.ToGetContainersRequest(host))
 	var containers []vm.Container
 	if err != nil {
 		log.Fatal(err)
-		return &containers, err
+		return nil, &containers, err
 	}
-	model, req := convert.ToContainersViewModelAndGetStatsRequest(res, host)
+	all, running, req := convert.ToContainersViewModelAndGetStatsRequest(res, host)
 	if stats {
 		go streamStats(ctx, c, req)
 	}
-	return model, nil
+	return all, running, nil
 }
 
 func streamStats(ctx context.Context, c pb.DockerHostServiceClient, req *pb.GetStatsRequest) {

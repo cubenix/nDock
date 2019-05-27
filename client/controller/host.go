@@ -10,7 +10,6 @@ import (
 	"github.com/gauravgahlot/dockerdoodle/client/rpc"
 	"github.com/gauravgahlot/dockerdoodle/client/viewmodels"
 	"github.com/gauravgahlot/dockerdoodle/client/ws"
-	"github.com/gauravgahlot/dockerdoodle/constants"
 	"github.com/gauravgahlot/dockerdoodle/types"
 )
 
@@ -42,17 +41,13 @@ func (h host) handleHosts(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	containers, err := helpers.GetContainers(h.client, hostIP, true)
+	all, running, err := helpers.GetContainers(h.client, hostIP, true)
 	if err != nil {
 		log.Fatal(err)
 		w.WriteHeader(http.StatusInternalServerError)
 	}
-	context.AllContainers = *containers
-	for _, c := range *containers {
-		if c.State == constants.ContainerRunning {
-			context.RunningContainers = append(context.RunningContainers, c)
-		}
-	}
+	context.AllContainers = *all
+	context.RunningContainers = *running
 	tErr := h.hostTemplate.Execute(w, context)
 	if tErr != nil {
 		log.Fatal(tErr)
@@ -73,12 +68,12 @@ func (h host) handleHostContainers(w http.ResponseWriter, r *http.Request) {
 			notFound = false
 		}
 	}
-	containers, err := helpers.GetContainers(h.client, hostIP, false)
+	all, _, err := helpers.GetContainers(h.client, hostIP, false)
 	if err != nil {
 		log.Fatal(err)
 		w.WriteHeader(http.StatusInternalServerError)
 	}
-	context.AllContainers = *containers
+	context.AllContainers = *all
 	tErr := h.hostContainerTemplate.Execute(w, context)
 	if tErr != nil {
 		log.Fatal(tErr)
