@@ -2,7 +2,6 @@ package services
 
 import (
 	"context"
-	"io"
 	"log"
 
 	"github.com/gauravgahlot/dockerdoodle/pb"
@@ -62,21 +61,11 @@ func (s *DockerHostService) GetStats(req *pb.GetStatsRequest, stream pb.DockerHo
 	}
 
 	for data := range api.StatsCh {
-		err := stream.Send(&pb.GetStatsReponse{Stats: data})
-		if err != nil {
-			log.Fatal(err)
-			return io.EOF
+		if _, ok := data[-1]; ok {
+			break
 		}
+		stream.Send(&pb.GetStatsReponse{Stats: data})
 	}
-	return io.EOF
-}
 
-func sendDataOverStream(stream pb.DockerHostService_GetStatsServer) {
-	for data := range api.StatsCh {
-		err := stream.Send(&pb.GetStatsReponse{Stats: data})
-		if err != nil {
-			log.Fatal(err)
-			return
-		}
-	}
+	return nil
 }

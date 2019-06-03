@@ -71,7 +71,10 @@ func GetDockerStats(ctx context.Context, host string, id string, cIndex int32) {
 		select {
 		case <-DoneCh:
 			DoneSignalSent = true
-			cli.Close()
+			m := map[int32]float32{
+				-1: 0.0,
+			}
+			StatsCh <- m
 			return
 		default:
 			if !DoneSignalSent {
