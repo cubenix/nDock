@@ -33,6 +33,7 @@ func Startup(templates map[string]*template.Template, client *rpc.Client, hosts 
 	containerController.registerRoutes()
 
 	http.Handle("/js/", http.FileServer(http.Dir("client/public")))
+	http.Handle("/img/", http.FileServer(http.Dir("client/public")))
 	http.Handle("/vendor/", http.FileServer(http.Dir("client/public")))
 	http.Handle("/css/", http.FileServer(http.Dir("client/public")))
 }
