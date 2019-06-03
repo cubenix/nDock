@@ -33,7 +33,7 @@ func (c container) startContainer(w http.ResponseWriter, r *http.Request) {
 	}
 	var hostIP string
 	for _, s := range *c.hosts {
-		if strings.EqualFold(req.ID, s.Name) {
+		if strings.EqualFold(req.Host, s.Name) {
 			hostIP = s.IP
 			break
 		}

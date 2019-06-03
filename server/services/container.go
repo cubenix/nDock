@@ -38,14 +38,14 @@ func (s *ContainerService) StartContainer(ctx context.Context, req *pb.StartCont
 	if err != nil {
 		return &pb.ErrorStatus{Message: "Failed to start the container"}, err
 	}
-	return nil, nil
+	return &pb.ErrorStatus{}, nil
 }
 
-// StopContainer starts a stopped or created container, if there is no error
+// StopContainer stops a running container, if there is no error
 func (s *ContainerService) StopContainer(ctx context.Context, req *pb.StopContainerRequest) (*pb.ErrorStatus, error) {
 	err := api.StopContainer(ctx, req.Host, req.ID)
 	if err != nil {
 		return &pb.ErrorStatus{Message: "Failed to stop the container"}, err
 	}
-	return nil, nil
+	return &pb.ErrorStatus{}, nil
 }

@@ -128,7 +128,6 @@ func StartContainer(ctx context.Context, host string, id string) error {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	return cli.ContainerStart(ctx, id, types.ContainerStartOptions{})
 }
 
