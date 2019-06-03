@@ -5,7 +5,7 @@ DockerDoodle started as a *fun side project*, hence the name, is an open-source 
 
 <br />Here is the first look:
 
-<div style="width:100%;height:0;padding-bottom:57%;position:relative;"><iframe src="https://gifyu.com/image/9JWi" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div>
+![DockerDoodle](https://s3.gifyu.com/images/containers-count-min.gif)
 
 ## Features 
 
