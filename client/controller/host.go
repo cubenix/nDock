@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"context"
 	"html/template"
 	"log"
 	"net/http"
@@ -27,54 +28,55 @@ func (h host) registerRoutes() {
 }
 
 func (h host) handleHosts(w http.ResponseWriter, r *http.Request) {
-	context := viewmodels.HostContainers{SelectedHost: r.URL.Path[6:]}
-	context.Hosts = []viewmodels.Host{}
-	context.Title = "Host Details"
+	res := viewmodels.HostContainers{SelectedHost: r.URL.Path[6:]}
+	res.Hosts = []viewmodels.Host{}
+	res.Title = "Host Details"
 
 	var hostIP string
 	notFound := true
 	for _, s := range *h.hosts {
-		context.Hosts = append(context.Hosts, viewmodels.Host{Name: s.Name, IP: s.IP})
+		res.Hosts = append(res.Hosts, viewmodels.Host{Name: s.Name, IP: s.IP})
 		if notFound && strings.EqualFold(r.URL.Path[6:], s.Name) {
 			hostIP = s.IP
 			notFound = false
 		}
 	}
 
-	all, running, err := helpers.GetContainers(h.client, hostIP, true)
+	all, running, err := helpers.GetContainers(context.Background(), h.client, hostIP, true)
 	if err != nil {
 		log.Fatal(err)
 		w.WriteHeader(http.StatusInternalServerError)
 	}
-	context.AllContainers = *all
-	context.RunningContainers = *running
-	tErr := h.hostTemplate.Execute(w, context)
+	res.AllContainers = *all
+	res.RunningContainers = *running
+	tErr := h.hostTemplate.Execute(w, res)
 	if tErr != nil {
 		log.Fatal(tErr)
 	}
 }
 
 func (h host) handleHostContainers(w http.ResponseWriter, r *http.Request) {
-	context := viewmodels.HostContainers{SelectedHost: r.URL.Path[17:], RunningContainers: []viewmodels.Container{}}
-	context.Hosts = []viewmodels.Host{}
-	context.Title = "Containers"
+	res := viewmodels.HostContainers{SelectedHost: r.URL.Path[17:], RunningContainers: []viewmodels.Container{}}
+	res.Hosts = []viewmodels.Host{}
+	res.Title = "Containers"
 
 	var hostIP string
 	notFound := true
 	for _, s := range *h.hosts {
-		context.Hosts = append(context.Hosts, viewmodels.Host{Name: s.Name, IP: s.IP})
+		res.Hosts = append(res.Hosts, viewmodels.Host{Name: s.Name, IP: s.IP})
 		if notFound && strings.EqualFold(r.URL.Path[17:], s.Name) {
 			hostIP = s.IP
 			notFound = false
 		}
 	}
-	all, _, err := helpers.GetContainers(h.client, hostIP, false)
+
+	all, _, err := helpers.GetContainers(context.Background(), h.client, hostIP, false)
 	if err != nil {
 		log.Fatal(err)
 		w.WriteHeader(http.StatusInternalServerError)
 	}
-	context.AllContainers = *all
-	tErr := h.hostContainerTemplate.Execute(w, context)
+	res.AllContainers = *all
+	tErr := h.hostContainerTemplate.Execute(w, res)
 	if tErr != nil {
 		log.Fatal(tErr)
 	}
