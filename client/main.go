@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"html/template"
 	"io/ioutil"
 	"log"
@@ -16,20 +17,30 @@ import (
 	"google.golang.org/grpc"
 )
 
+var useLocal = flag.Bool("L", false, "use localhost as the only Docker Host")
+
 func main() {
+	flag.Parse()
+
 	conn, err := grpc.Dial("localhost"+constants.ServerPort, grpc.WithInsecure())
-	if err != nil {
-		log.Fatal(err)
-	}
 	defer conn.Close()
+	if err != nil {
+		panic(err.Error())
+	}
 
 	clients := rpc.InitializeClients(conn)
 	templates := populateTemplates()
-	config := readConfiguration()
-	controller.Startup(templates, clients, &config.Hosts)
 
+	var config *types.Config
+	if *useLocal {
+		config = configForLocalEnv()
+	} else {
+		config = readConfiguration()
+	}
+
+	controller.Startup(templates, clients, &config.Hosts)
 	server := http.Server{
-		Addr: "localhost" + constants.ClientPort,
+		Addr: constants.ClientPort,
 	}
 	log.Println("Client App listening at port", constants.ClientPort)
 	log.Fatal(server.ListenAndServe())
@@ -75,4 +86,14 @@ func readConfiguration() *types.Config {
 		log.Panic("Failed to read the configuration")
 	}
 	return &conf
+}
+
+func configForLocalEnv() *types.Config {
+	host, _ := os.Hostname()
+	const localIP = "0.0.0.0"
+	return &types.Config{
+		Hosts: []types.Host{
+			types.Host{Name: host, IP: localIP},
+		},
+	}
 }
