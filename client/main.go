@@ -17,12 +17,15 @@ import (
 	"google.golang.org/grpc"
 )
 
-var useLocal = flag.Bool("L", false, "use localhost as the only Docker Host")
+var (
+	useLocal       = flag.Bool("L", false, "use localhost as the only Docker Host")
+	serverEndpoint = flag.String("s", constants.LocalIP, "endpoint of the GRPC server")
+)
 
 func main() {
 	flag.Parse()
 
-	conn, err := grpc.Dial("localhost"+constants.ServerPort, grpc.WithInsecure())
+	conn, err := grpc.Dial(*serverEndpoint+constants.ServerPort, grpc.WithInsecure())
 	defer conn.Close()
 	if err != nil {
 		panic(err.Error())
@@ -90,10 +93,9 @@ func readConfiguration() *types.Config {
 
 func configForLocalEnv() *types.Config {
 	host, _ := os.Hostname()
-	const localIP = "0.0.0.0"
 	return &types.Config{
 		Hosts: []types.Host{
-			types.Host{Name: host, IP: localIP},
+			types.Host{Name: host, IP: constants.LocalIP},
 		},
 	}
 }

@@ -7,6 +7,9 @@ const (
 	ServerNetwork = "tcp"
 )
 
+// LocalIP is the IP address of the localhost
+const LocalIP = "0.0.0.0"
+
 // DockerAPIPort is the default TCP port on each host, at which Docker should be listening for TCP requests
 const DockerAPIPort = ":2375"
 
