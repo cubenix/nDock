@@ -4,18 +4,14 @@ import (
 	"log"
 	"net"
 
+	"github.com/gauravgahlot/dockerdoodle/constants"
 	"github.com/gauravgahlot/dockerdoodle/pb"
 	"github.com/gauravgahlot/dockerdoodle/server/services"
 	"google.golang.org/grpc"
 )
 
-const (
-	port    = ":5000"
-	network = "tcp"
-)
-
 func main() {
-	lis, err := net.Listen(network, port)
+	lis, err := net.Listen(constants.ServerNetwork, constants.ServerPort)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -24,7 +20,7 @@ func main() {
 	// register services with gRPC server
 	registerServices(server)
 
-	log.Println("Server listening at port", port)
+	log.Println("Server listening at port", constants.ServerPort)
 	server.Serve(lis)
 }
 
