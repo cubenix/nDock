@@ -1,7 +1,6 @@
 # Build the Source Code
 
-## Prerequisites
-You must have:
+To get started, you must have:
 - installed [Git](https://git-scm.com/) 
 - installed [Go](https://golang.org/dl/) and setup the GOPATH
 - [configured Docker hosts](https://github.com/gauravgahlot/dockerdoodle/blob/master/docs/host-configuration.md) to listen for `TCP` requests at port `2375`
