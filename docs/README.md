@@ -7,10 +7,11 @@ DockerDoodle started as a *fun side project*, hence the name, is an open-source 
 
 ![DockerDoodle](https://s3.gifyu.com/images/containers-count-min.gif)
 
-<br />With DockerDoodle you can transform your container stats from this:
+<br />
+<br />With DockerDoodle you can transform your container stats (CPU usage) from this:
 
 ![DockerStats](https://s3.gifyu.com/images/docker-stats.png)
-                                <p style="text-align: center;"> &darr; </p>
+ <br /> to something more elegant and presentable:
 
 ![DockerStats](https://s3.gifyu.com/images/docker-stats.gif)
 
