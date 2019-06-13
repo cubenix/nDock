@@ -9,7 +9,7 @@ DockerDoodle started as a *fun side project*, hence the name, is an open-source 
 
 <br />With DockerDoodle you can transform your container stats from this:
 
-![DockerStats](https://github.com/gauravgahlot/dockerdoodle/blob/master/docs/samples/docker-stats.png)
+![DockerStats](https://s3.gifyu.com/images/docker-stats.png)
                                 <p style="text-align: center;"> &darr; </p>
 
 ![DockerStats](https://s3.gifyu.com/images/docker-stats.gif)
