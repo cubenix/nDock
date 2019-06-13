@@ -1,4 +1,4 @@
-# DockerDoodle
+<br />
 
 DockerDoodle started as a *fun side project*, hence the name, is an open-source project built around the idea of managing **Docker containers** running on **individual** hosts.
 <br />
@@ -6,6 +6,13 @@ DockerDoodle started as a *fun side project*, hence the name, is an open-source 
 <br />Here is the first look:
 
 ![DockerDoodle](https://s3.gifyu.com/images/containers-count-min.gif)
+
+<br />With DockerDoodle you can transform your container stats from this:
+
+![DockerStats](https://github.com/gauravgahlot/dockerdoodle/blob/master/docs/samples/docker-stats.png)
+                                <p style="text-align: center;"> &darr; </p>
+
+![DockerStats](https://s3.gifyu.com/images/docker-stats.gif)
 
 
 ## Release
