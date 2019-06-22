@@ -1,7 +1,6 @@
-package main
+package client
 
 import (
-	"flag"
 	"html/template"
 	"io/ioutil"
 	"log"
@@ -17,15 +16,10 @@ import (
 	"google.golang.org/grpc"
 )
 
-var (
-	useLocal       = flag.Bool("L", false, "use localhost as the only Docker Host")
-	serverEndpoint = flag.String("s", constants.LocalIP, "endpoint of the GRPC server")
-)
-
-func main() {
-	flag.Parse()
-
-	conn, err := grpc.Dial(*serverEndpoint+constants.ServerPort, grpc.WithInsecure())
+// Initialize creates a web server that serves the web UI.
+// This web server also acts as a gRPC client, for the requests made to Docker hosts.
+func Initialize(useLocal bool, serverEndpoint string) {
+	conn, err := grpc.Dial(serverEndpoint+constants.ServerPort, grpc.WithInsecure())
 	defer conn.Close()
 	if err != nil {
 		panic(err.Error())
@@ -35,7 +29,7 @@ func main() {
 	templates := populateTemplates()
 
 	var config *types.Config
-	if *useLocal {
+	if useLocal {
 		config = configForLocalEnv()
 	} else {
 		config = readConfiguration()

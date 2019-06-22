@@ -1,4 +1,4 @@
-package main
+package server
 
 import (
 	"log"
@@ -10,7 +10,8 @@ import (
 	"google.golang.org/grpc"
 )
 
-func main() {
+// Initialize creates a gRPC server that interacts with the Docker hosts
+func Initialize() {
 	lis, err := net.Listen(constants.ServerNetwork, constants.ServerPort)
 	if err != nil {
 		log.Fatal(err)
