@@ -4,8 +4,8 @@ import (
 	"log"
 	"net"
 
-	"github.com/gauravgahlot/dockerdoodle/constants"
-	"github.com/gauravgahlot/dockerdoodle/pb"
+	"github.com/gauravgahlot/dockerdoodle/pkg/constants"
+	"github.com/gauravgahlot/dockerdoodle/pkg/pb"
 	"github.com/gauravgahlot/dockerdoodle/server/services"
 	"google.golang.org/grpc"
 )

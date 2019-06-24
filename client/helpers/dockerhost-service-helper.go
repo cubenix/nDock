@@ -9,8 +9,8 @@ import (
 	convert "github.com/gauravgahlot/dockerdoodle/client/converters"
 	vm "github.com/gauravgahlot/dockerdoodle/client/viewmodels"
 	"github.com/gauravgahlot/dockerdoodle/client/ws"
-	"github.com/gauravgahlot/dockerdoodle/pb"
-	"github.com/gauravgahlot/dockerdoodle/types"
+	"github.com/gauravgahlot/dockerdoodle/pkg/pb"
+	"github.com/gauravgahlot/dockerdoodle/pkg/types"
 )
 
 // Hub is a hub of clients and channels

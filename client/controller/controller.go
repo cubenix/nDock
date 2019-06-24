@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gauravgahlot/dockerdoodle/client/rpc"
-	"github.com/gauravgahlot/dockerdoodle/types"
+	"github.com/gauravgahlot/dockerdoodle/pkg/types"
 )
 
 var (

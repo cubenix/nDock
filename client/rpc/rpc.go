@@ -1,7 +1,7 @@
 package rpc
 
 import (
-	"github.com/gauravgahlot/dockerdoodle/pb"
+	"github.com/gauravgahlot/dockerdoodle/pkg/pb"
 	"google.golang.org/grpc"
 )
 

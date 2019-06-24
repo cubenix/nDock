@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 
-	"github.com/gauravgahlot/dockerdoodle/types"
+	"github.com/gauravgahlot/dockerdoodle/pkg/types"
 )
 
 // ConfigReader represents the service that reads the configuration,

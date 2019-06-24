@@ -7,7 +7,7 @@ import (
 
 	convert "github.com/gauravgahlot/dockerdoodle/client/converters"
 	vm "github.com/gauravgahlot/dockerdoodle/client/viewmodels"
-	"github.com/gauravgahlot/dockerdoodle/pb"
+	"github.com/gauravgahlot/dockerdoodle/pkg/pb"
 )
 
 // GetContainer get container details for a container ID

@@ -6,7 +6,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/gauravgahlot/dockerdoodle/pb"
+	"github.com/gauravgahlot/dockerdoodle/pkg/pb"
 	api "github.com/gauravgahlot/dockerdoodle/server/api-wrapper"
 	"github.com/gauravgahlot/dockerdoodle/server/converter"
 )

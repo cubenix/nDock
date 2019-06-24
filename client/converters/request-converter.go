@@ -1,8 +1,8 @@
 package converters
 
 import (
-	"github.com/gauravgahlot/dockerdoodle/pb"
-	"github.com/gauravgahlot/dockerdoodle/types"
+	"github.com/gauravgahlot/dockerdoodle/pkg/pb"
+	"github.com/gauravgahlot/dockerdoodle/pkg/types"
 )
 
 // ToGetContainersCountRequest returns GetContainersCountRequestObject

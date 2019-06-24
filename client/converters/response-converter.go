@@ -2,9 +2,9 @@ package converters
 
 import (
 	vm "github.com/gauravgahlot/dockerdoodle/client/viewmodels"
-	"github.com/gauravgahlot/dockerdoodle/constants"
-	"github.com/gauravgahlot/dockerdoodle/pb"
-	"github.com/gauravgahlot/dockerdoodle/types"
+	"github.com/gauravgahlot/dockerdoodle/pkg/constants"
+	"github.com/gauravgahlot/dockerdoodle/pkg/pb"
+	"github.com/gauravgahlot/dockerdoodle/pkg/types"
 )
 
 // ToHostsViewModel returns a collection of Host view model

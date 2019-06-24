@@ -2,7 +2,7 @@ package converter
 
 import (
 	"github.com/docker/docker/api/types"
-	"github.com/gauravgahlot/dockerdoodle/pb"
+	"github.com/gauravgahlot/dockerdoodle/pkg/pb"
 )
 
 // ToGetContainersResponse returns response object for GetContainers call
