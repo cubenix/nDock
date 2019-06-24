@@ -1,4 +1,4 @@
-# DockerDoodle
+# DockerDoodle - [![Build Status](https://travis-ci.com/gauravgahlot/dockerdoodle.svg?branch=master)](https://travis-ci.com/gauravgahlot/dockerdoodle)
 
 DockerDoodle started as a *fun side project*, hence the name, is an open-source project built around the idea of managing **Docker containers** running on **individual** hosts.
 <br />
