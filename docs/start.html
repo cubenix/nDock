@@ -49,7 +49,7 @@
             <div class="container">
                 <div id="doc-header" class="doc-header text-center">
                     <h1 class="doc-title"><i class="icon fa fa-paper-plane"></i> Quick Start</h1>
-                    <div class="meta"><i class="far fa-clock"></i> Last updated: June 20th, 2019</div>
+                    <div class="meta"><i class="far fa-clock"></i> Last updated: June 27th, 2019</div>
                 </div><!--//doc-header-->
                 <div class="doc-body row">
                     <div class="doc-content col-md-9 col-12 order-1">
@@ -76,31 +76,21 @@
                                 <h2 class="section-title">Getting Packages</h2>
                                 <div class="section-block">
                                     <p>
-                                        Once you have installed and setup Go, you are ready to install the packages required by the application to run. 
+                                        Once you have installed and setup Go, you are ready to install the packages required by the application to run. DockerDoodle uses <a href="https://blog.golang.org/using-go-modules" target="_blank">Go Modules</a> to manage its dependencies. 
                                     </p>
-                                    <div id="grpc"  class="section-block">
-                                        <h3 class="block-title">gRPC</h3>
-                                        <p>gRPC is a modern open source high performance RPC framework that can run in any environment. It can efficiently connect services in and across data centers with pluggable support for load balancing, tracing, health checking and authentication.
-                                        </p>
-                                        <div class="code-block">
-                                            <h6>You can get the gRPC package by using the following command: </h6>
-                                            <p><code>$ go get -u google.golang.org/grpc</code></p>
-                                        </div><!--//code-block-->
-                                    </div><!--//section-block-->
-
-                                    <div id="protobuf"  class="section-block">
-                                        <h3 class="block-title">Protocol Buffers</h3>
-                                        <p>Protocol buffers are a language-neutral, platform-neutral extensible mechanism for serializing structured data. You define how you want your data to be structured once, then you can use special generated source code to easily write and read your structured data to and from a variety of data streams and using a variety of languages.
-                                        </p>
-                                        <div class="code-block">
-                                            <h6>You can get the protocol buffers package by using the following command: </h6>
-                                            <p><code>$ go get -u github.com/golang/protobuf/proto</code></p>
-                                        </div><!--//code-block-->
-                                    </div><!--//section-block-->
-
                                     <p>
-                                        In order to get the remaining packages, open a terminal window and navigate to the directory where you have extracted the above downloaded <em>.zip</em> or <em>.tar.gz</em> file. Now, execute the following command to get all the remaining packages:
-                                        <p><code>$ go get ./...</code></p>
+                                        Module behavior is controlled by an environment variable, <strong>GO111MODULE</strong>, which can be set to <strong>on</strong>, <strong>off</strong> or <strong>auto</strong> (default). When <strong>GO111MODULE</strong> is set to off, the go command maintains the same functionality as in previous versions and uses packages in the <strong>GOPATH</strong> during the build. If <strong>GO111MODULE</strong> is set to on, the go command disregards the <strong>GOPATH</strong> and requires the use of modules instead.
+                                    </p>
+                                    <p>
+                                        We are going to set the <strong>GO111MODULE</strong> as <strong>on</strong>, using the following command:
+                                        <p><code>$ export GO111MODULE=on</code></p>
+                                        If you are on Windows, use <strong>set</strong> instead of <strong>export</strong>.
+                                    </p>
+                                    <p>
+                                        Using the terminal, navigate to the directory where you have extracted the downloaded file. Now run the following commands to get the dependent packages:
+                                        <p><code>$ go build server/main.go</code></p>
+                                        <p><code>$ go build client/main.go</code></p>
+                                        If you don't get any errors, all the dependencies are now available and you are good to go.
                                     </p>
                                 </div><!--//section-block-->
                             </section><!--//doc-section-->
@@ -189,10 +179,6 @@
                                 <a class="nav-link scrollto" href="#download-section">Download</a>
                                 <a class="nav-link scrollto" href="#installation-section">Install Go</a>
                                 <a class="nav-link scrollto" href="#getting-packages">Getting Packages</a>
-                                <nav class="doc-sub-menu nav flex-column">
-                                    <a class="nav-link scrollto" href="#grpc">gRPC</a>
-                                    <a class="nav-link scrollto" href="#protobuf">Protocol Buffers</a>
-                                </nav><!--//nav-->
                                 <a class="nav-link scrollto" href="#docker-hosts">Docker Hosts</a>
                                 <nav class="doc-sub-menu nav flex-column">
                                     <a class="nav-link scrollto" href="#pre-reqs">Prerequisites</a>
