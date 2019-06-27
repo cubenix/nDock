@@ -47,23 +47,32 @@
             <div class="container">
                 <div id="doc-header" class="doc-header text-center">
                     <h1 class="doc-title"><span aria-hidden="true" class="icon icon_puzzle_alt"></span> Contribute</h1>
-                    <div class="meta"><i class="far fa-clock"></i> Last updated: June 20th, 2019</div>
+                    <div class="meta"><i class="far fa-clock"></i> Last updated: June 27th, 2019</div>
                 </div><!--//doc-header-->
                 <div class="doc-body row">
                     <div class="doc-content col-md-9 col-12 order-1">
                         <div class="content-inner">
-                            <section id="download-section" class="doc-section">
-                                <h2 class="section-title">Download</h2>
+                            <p>
+                                Contributions are always welcome!
+                            </p>
+                            <p>
+                                DockerDoodle is <a class="dotted-line" href="https://github.com/gauravgahlot/dockerdoodle/blob/master/LICENSE" target="_blank">MIT Licensed</a> and accepts contributions via GitHub pull requests. This document outlines some of the conventions on development workflow, commit message formatting, contact points and other resources to make it easier to get your contributions accepted.
+                            </p>
+                            <p>
+                                We gratefully welcome improvements to both, the <strong>documentation</strong> as well as the <strong>code</strong>.
+                            </p>
+                            <section id="git-clone" class="doc-section">
+                                <h2 class="section-title">Getting the Code</h2>
                                 <div class="section-block">
-                                    <p>To get started using DockerDoodle, you need to first download the latest code using the below link. After that follow the steps below and manage your Docker containers with DockerDoodle.
+                                    <p>To get started contributing to DockerDoodle, you first need to clone the repository by following the below instruction. Please ensure that you have <a href="https://git-scm.com/" target="_blank">Git</a> installed on your local system.
                                     </p>
-                                    <a href="https://github.com/gauravgahlot/dockerdoodle/zipball/master" class="btn btn-green" target="_blank"><i class="fas fa-download"></i> Download .zip</a>
-                                    <a href="https://github.com/gauravgahlot/dockerdoodle/tarball/master" class="btn btn-green" target="_blank"><i class="fas fa-download"></i> Download .tar.gz</a>
+                                    <p><code>$ git clone https://github.com/gauravgahlot/dockerdoodle.git<br />
+                                    $ cd dockerdoodle </code></p>
                                 </div>
                             </section><!--//doc-section-->
 
                             <section id="installation-section" class="doc-section">
-                                <h2 class="section-title">Install Go</h2>
+                                <h2 class="section-title">Installing Go</h2>
                                 <div class="section-block">
                                     <p>Go is an open source programming language that makes it easy to build simple, reliable, and efficient software.
                                     <p>You can install Go by following the steps defined at their <a href="https://golang.org/dl/" target="_blank">download</a> page.</p>                                    
@@ -74,31 +83,21 @@
                                 <h2 class="section-title">Getting Packages</h2>
                                 <div class="section-block">
                                     <p>
-                                        Once you have installed and setup Go, you are ready to install the packages required by the application to run. 
+                                        Once you have installed and setup Go, you are ready to install the packages required by the application to run. DockerDoodle uses <a href="https://blog.golang.org/using-go-modules" target="_blank">Go Modules</a> to manage its dependencies. 
                                     </p>
-                                    <div id="grpc"  class="section-block">
-                                        <h3 class="block-title">gRPC</h3>
-                                        <p>gRPC is a modern open source high performance RPC framework that can run in any environment. It can efficiently connect services in and across data centers with pluggable support for load balancing, tracing, health checking and authentication.
-                                        </p>
-                                        <div class="code-block">
-                                            <h6>You can get the gRPC package by using the following command: </h6>
-                                            <p><code>$ go get -u google.golang.org/grpc</code></p>
-                                        </div><!--//code-block-->
-                                    </div><!--//section-block-->
-
-                                    <div id="protobuf"  class="section-block">
-                                        <h3 class="block-title">Protocol Buffers</h3>
-                                        <p>Protocol buffers are a language-neutral, platform-neutral extensible mechanism for serializing structured data. You define how you want your data to be structured once, then you can use special generated source code to easily write and read your structured data to and from a variety of data streams and using a variety of languages.
-                                        </p>
-                                        <div class="code-block">
-                                            <h6>You can get the protocol buffers package by using the following command: </h6>
-                                            <p><code>$ go get -u github.com/golang/protobuf/proto</code></p>
-                                        </div><!--//code-block-->
-                                    </div><!--//section-block-->
-
                                     <p>
-                                        In order to get the remaining packages, open a terminal window and navigate to the directory where you have extracted the above downloaded <em>.zip</em> or <em>.tar.gz</em> file. Now, execute the following command to get all the remaining packages:
-                                        <p><code>$ go get ./...</code></p>
+                                        Module behavior is controlled by an environment variable, <strong>GO111MODULE</strong>, which can be set to <strong>on</strong>, <strong>off</strong> or <strong>auto</strong> (default). When <strong>GO111MODULE</strong> is set to off, the go command maintains the same functionality as in previous versions and uses packages in the <strong>GOPATH</strong> during the build. If <strong>GO111MODULE</strong> is set to on, the go command disregards the <strong>GOPATH</strong> and requires the use of modules instead.
+                                    </p>
+                                    <p>
+                                        We are going to set the <strong>GO111MODULE</strong> as <strong>on</strong>, using the following command:
+                                        <p><code>$ export GO111MODULE=on</code></p>
+                                        If you are on Windows, use <strong>set</strong> instead of <strong>export</strong>.
+                                    </p>
+                                    <p>
+                                        Using the terminal, navigate to the directory where you have extracted the downloaded file. Now run the following commands to get the dependent packages:
+                                        <p><code>$ go build server/main.go<br />
+                                        $ go build client/main.go</code></p>
+                                        If you don't get any errors, all the dependencies are now available and you are good to go.
                                     </p>
                                 </div><!--//section-block-->
                             </section><!--//doc-section-->
@@ -146,8 +145,8 @@
 &lt;snip&gt;
 </code></pre>
                                         <p>Note the <em>tcp://0.0.0.0:2375</em> added in the host list, that the Daemon will connect to. Now, save the file and execute the following commands to restart the Docker daemon:</p>
-                                        <p><code>$ sudo systemctl daemon-reload</code></p>
-                                        <p><code>$ sudo service docker restart</code></p>
+                                        <p><code>$ sudo systemctl daemon-reload<br />
+                                        $ sudo service docker restart</code></p>
                                         <p>If you don't get any errors, it's time to test the configuration.</p>
                                     </div><!--//section-block-->
     
@@ -171,33 +170,86 @@
                                     
                                     <div class="code-block">
                                         <h6>Execute the following commands to spin up the server and client:</h6>
-                                        <p><code>$ go run server/main.go</code></p>
-                                        <p><code>$ go run client/main.go</code></p>
+                                        <p><code>$ go run server/main.go<br />
+                                        $ go run client/main.go</code></p>
                                     </div><!--//code-block-->                                   
                                     <p>
                                         By default the client and server listen at port <strong>:7585</strong> and <strong>:7584</strong> respectively.
                                     </p>
                                 </div><!--//section-block-->
                             </section><!--//doc-section-->
+
+                            <section id="protocol-buffers" class="doc-section">
+                                <h2 class="section-title">Using Protocol Buffers</h2>
+                                <div class="section-block">
+                                    <div id="protoc-compiler"  class="section-block">
+                                        <h3 class="block-title">Protoc Compiler</h3>
+                                        <p>
+                                            In case you plan to change the <strong>gRPC</strong> service or <strong>messages</strong>, you will need the <code>protoc</code> compiler. You can download the same from Protocol Buffers <a href="https://github.com/protocolbuffers/protobuf/releases" target="_blank">release page</a>.                                             
+                                        </p>
+                                        <p>
+                                            You also need the <code>protoc-gen-go</code> plugin for the protocol buffer compiler to generate Go code. You can get it with the following command:
+                                        </p>
+                                        <p><code>$ go get -u github.com/golang/protobuf/protoc-gen-go</code></p>
+                                    </div><!--//section-block-->
+                                    <div id="compile-changes"  class="section-block">
+                                        <h3 class="block-title">Compiling the Changes</h3>
+                                        <p>
+                                            You can find the existing protobuf messages and RPC services definition under <code>/pkg/pb-messages</code>. You may update the message or service, or may add a completely new protobuf definition based on your requirement.
+                                        </p>
+                                        <p>
+                                            Once you have made the changes in PB messages or RPC service, it's time to compile them and generate the equivalent Go code. Use the following command for the same:
+                                        </p>
+                                        <p><code>protoc -I ./pkg/pb-messages ./pkg/pb-messages/<changed-file>.proto --go_out=plugins=grpc:./pkg/pb</code></p>
+                                    </div><!--//section-block-->
+    
+                                </div><!--//section-block-->
+                            </section><!--//doc-section-->
+    
+                            <section id="change-ports" class="doc-section">
+                                <h2 class="section-title">Change default Ports</h2>
+                                <div class="section-block">
+                                    <p>
+                                        The default ports for the gRPC Client and Server are defined as <strong>ClientPort</strong> and <strong>ServerPort</strong> in <code>/pkg/constants/constants.go</code>. If required, you just need to change the ports here and it will work. 
+                                    </p>
+                                    <p>
+                                        If you change the <strong>ClientPort</strong>, it's is <strong>very</strong> important to update the port used for building the <strong>Web Socket</strong> connection. This web socket connection is used to <strong>push</strong> container stats from the server to the client. Therefore, it's very critical. 
+                                    </p>
+                                    <p>
+                                        To change the port, go to <code>/client/templates/content/host.html</code> and towards the end of the file, you must see:
+<pre><code class="language-javascript">&lt;snip&gt;
+    window.onload = () => {
+        if (window["WebSocket"]) {
+          conn = new WebSocket("ws://localhost:7585/ws");
+&lt;snip&gt;
+</code></pre>
+                                        Change the port from <code>:7585</code> to the new value of <strong>ClientPort</strong> and you are good.        
+                                    </p>
+                                </div><!--//section-block-->
+                            </section><!--//doc-section-->
+    
+
                         </div><!--//content-inner-->
                     </div><!--//doc-content-->
                     <div class="doc-sidebar col-md-3 col-12 order-0 d-none d-md-flex">
                         <div id="doc-nav" class="doc-nav">
                             <nav id="doc-menu" class="nav doc-menu flex-column sticky">
-                                <a class="nav-link scrollto" href="#download-section">Download</a>
-                                <a class="nav-link scrollto" href="#installation-section">Install Go</a>
+                                <a class="nav-link scrollto" href="#git-clone">Getting the Code</a>
+                                <a class="nav-link scrollto" href="#installation-section">Installing Go</a>
                                 <a class="nav-link scrollto" href="#getting-packages">Getting Packages</a>
-                                <nav class="doc-sub-menu nav flex-column">
-                                    <a class="nav-link scrollto" href="#grpc">gRPC</a>
-                                    <a class="nav-link scrollto" href="#protobuf">Protocol Buffers</a>
-                                </nav><!--//nav-->
                                 <a class="nav-link scrollto" href="#docker-hosts">Docker Hosts</a>
                                 <nav class="doc-sub-menu nav flex-column">
                                     <a class="nav-link scrollto" href="#pre-reqs">Prerequisites</a>
                                     <a class="nav-link scrollto" href="#docker-daemon">Docker Daemon</a>
                                     <a class="nav-link scrollto" href="#test">Test Configuration</a>
                                 </nav><!--//nav-->
-                                <a class="nav-link scrollto" href="#first-run">First Run</a>
+                                <a class="nav-link scrollto" href="#first-run">Run DockerDoodle</a>
+                                <a class="nav-link scrollto" href="#protocol-buffers">Using Protocol Buffers</a>
+                                <nav class="doc-sub-menu nav flex-column">                                    
+                                    <a class="nav-link scrollto" href="#protoc-compiler">Protoc Compiler</a>
+                                    <a class="nav-link scrollto" href="#compile-changes">Compiling the Changes</a>
+                                </nav><!--//nav-->    
+                                <a class="nav-link scrollto" href="#change-ports">Change default Ports</a>
                             </nav><!--//doc-menu-->	                        
                         </div>
                     </div><!--//doc-sidebar-->
