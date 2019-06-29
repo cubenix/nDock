@@ -54,6 +54,11 @@ message RemoveContainerRequest {
     string host = 2;
 }
 
+message GetLogsRequest {
+    string iD = 1;
+    string host = 2;
+}
+
 message ErrorStatus {
     string message = 1;
 }
@@ -63,4 +68,5 @@ service ContainerService {
     rpc StartContainer (StartContainerRequest) returns (ErrorStatus);
     rpc StopContainer (StopContainerRequest) returns (ErrorStatus);
     rpc RemoveContainer (RemoveContainerRequest) returns (ErrorStatus);
+    rpc GetContainerLogs (GetLogsRequest) returns (ErrorStatus);
 }

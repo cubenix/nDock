@@ -58,3 +58,9 @@ func (s *ContainerService) RemoveContainer(ctx context.Context, req *pb.RemoveCo
 	}
 	return &pb.ErrorStatus{}, nil
 }
+
+// GetContainerLogs returns logs of a container
+func (s *ContainerService) GetContainerLogs(ctx context.Context, req *pb.GetLogsRequest) (*pb.ErrorStatus, error) {
+	// TODO: Get logs for a given container
+	return &pb.ErrorStatus{}, nil
+}
