@@ -5,6 +5,6 @@ DockerDoodle started as a *fun side project*, hence the name, is an open-source 
 
 <br />Here is the first look:
 
-![Home | DockerDoodle](https://github.com/gauravgahlot/dockerdoodle/blob/master/docs/samples/containers-count.gif)
+![Home | DockerDoodle](https://github.com/gauravgahlot/dockerdoodle/blob/master/media/docker-stats.gif)
 
 <br />Checkout [DockerDoodle](https://gauravgahlot.github.io/dockerdoodle/) web page to learn more about the application and its features.
