@@ -140,3 +140,20 @@ func StopContainer(ctx context.Context, host string, id string) error {
 	}
 	return cli.ContainerStop(ctx, id, nil)
 }
+
+// RemoveContainer removes a container in exited or created state
+func RemoveContainer(ctx context.Context, host string, id string) error {
+	cli, err := client.NewClientWithOpts(client.WithHost(constants.DockerAPIProtocol+host+constants.DockerAPIPort),
+		client.WithVersion(constants.DockerAPIVersion))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// TODO: accept options from user
+	opts := types.ContainerRemoveOptions{
+		Force:         false,
+		RemoveLinks:   false,
+		RemoveVolumes: true,
+	}
+	return cli.ContainerRemove(ctx, id, opts)
+}

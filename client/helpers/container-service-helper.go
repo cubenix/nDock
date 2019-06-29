@@ -39,3 +39,13 @@ func StopContainer(ctx context.Context, c pb.ContainerServiceClient, host string
 	}
 	return nil
 }
+
+// RemoveContainer removes a container in exited or created state, if there is no error
+func RemoveContainer(ctx context.Context, c pb.ContainerServiceClient, host string, id string) error {
+	res, err := c.RemoveContainer(ctx, &pb.RemoveContainerRequest{ID: id, Host: host})
+	if err != nil {
+		log.Fatal(err)
+		return errors.New(res.Message)
+	}
+	return nil
+}

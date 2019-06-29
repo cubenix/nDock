@@ -23,6 +23,7 @@ type container struct {
 func (c container) registerRoutes() {
 	http.HandleFunc("/container/start", c.startContainer)
 	http.HandleFunc("/container/stop", c.stopContainer)
+	http.HandleFunc("/container/remove", c.removeContainer)
 }
 
 func (c container) startContainer(w http.ResponseWriter, r *http.Request) {
@@ -60,6 +61,26 @@ func (c container) stopContainer(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	err := helpers.StopContainer(context.Background(), c.client, hostIP, req.ID)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func (c container) removeContainer(w http.ResponseWriter, r *http.Request) {
+	var req vm.ContainerOperationRequest
+	decErr := json.NewDecoder(r.Body).Decode(&req)
+	if decErr != nil {
+		log.Fatal("Invalid Request: ", decErr)
+		w.WriteHeader(http.StatusBadRequest)
+	}
+	var hostIP string
+	for _, s := range *c.hosts {
+		if strings.EqualFold(req.Host, s.Name) {
+			hostIP = s.IP
+			break
+		}
+	}
+	err := helpers.RemoveContainer(context.Background(), c.client, hostIP, req.ID)
 	if err != nil {
 		log.Fatal(err)
 	}
