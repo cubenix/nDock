@@ -122,7 +122,7 @@
                 data: JSON.stringify({ host: '{{$selectedHost}}', id: '{{.ID}}' }),
                 contentType: "application/json; charset=utf-8",
                 success: function (res) {
-                  console.log(res)
+                  location.reload(true);
                 },
                 error: function(res) {
                   console.log(res);
@@ -138,7 +138,7 @@
                 data: JSON.stringify({ host: '{{$selectedHost}}', id: '{{.ID}}' }),
                 contentType: "application/json; charset=utf-8",
                 success: function (res) {
-                  console.log(res)
+                  location.reload(true);
                 },
                 error: function(res) {
                   console.log(res);
@@ -147,19 +147,25 @@
             });
 
             $("#{{.Name}}-remove").click(function(e){
-              e.preventDefault();
-              $.ajax({
-                url: '/container/remove',
-                type: 'POST',
-                data: JSON.stringify({ host: '{{$selectedHost}}', id: '{{.ID}}' }),
-                contentType: "application/json; charset=utf-8",
-                success: function (res) {
-                  console.log(res)
-                },
-                error: function(res) {
-                  console.log(res);
-                }
-              });
+              if('{{.State}}' === "running") {
+                e.preventDefault();
+                alert("You cannot remove a running container '{{.Name}}'. Stop the container before attempting removal.")
+              } 
+              else {
+                e.preventDefault();
+                $.ajax({
+                  url: '/container/remove',
+                  type: 'POST',
+                  data: JSON.stringify({ host: '{{$selectedHost}}', id: '{{.ID}}' }),
+                  contentType: "application/json; charset=utf-8",
+                  success: function (res) {
+                    location.reload(true);
+                  },
+                  error: function(res) {
+                    console.log(res);
+                  }
+                });
+              }
             });
           </script>
         {{ end }}
