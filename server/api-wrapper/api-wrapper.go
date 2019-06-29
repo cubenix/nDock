@@ -131,7 +131,7 @@ func StartContainer(ctx context.Context, host string, id string) error {
 	return cli.ContainerStart(ctx, id, types.ContainerStartOptions{})
 }
 
-// StopContainer starts a stopped or created container
+// StopContainer stops a container in running state
 func StopContainer(ctx context.Context, host string, id string) error {
 	cli, err := client.NewClientWithOpts(client.WithHost(constants.DockerAPIProtocol+host+constants.DockerAPIPort),
 		client.WithVersion(constants.DockerAPIVersion))

@@ -20,7 +20,7 @@ func GetContainer(ctx context.Context, c pb.ContainerServiceClient, host string,
 	return convert.ToContainerViewModel(res.Container), nil
 }
 
-// StartContainer starts a stopped or created container
+// StartContainer starts a stopped or created container, if there is no error
 func StartContainer(ctx context.Context, c pb.ContainerServiceClient, host string, id string) error {
 	res, err := c.StartContainer(ctx, &pb.StartContainerRequest{ID: id, Host: host})
 	if err != nil {
@@ -30,7 +30,7 @@ func StartContainer(ctx context.Context, c pb.ContainerServiceClient, host strin
 	return nil
 }
 
-// StopContainer starts a stopped or created container
+// StopContainer stops a running container, if there is no error
 func StopContainer(ctx context.Context, c pb.ContainerServiceClient, host string, id string) error {
 	res, err := c.StopContainer(ctx, &pb.StopContainerRequest{ID: id, Host: host})
 	if err != nil {
