@@ -22,6 +22,7 @@ type container struct {
 
 func (c container) registerRoutes() {
 	http.HandleFunc("/container/start", c.startContainer)
+	http.HandleFunc("/container/stop", c.stopContainer)
 }
 
 func (c container) startContainer(w http.ResponseWriter, r *http.Request) {
@@ -53,7 +54,7 @@ func (c container) stopContainer(w http.ResponseWriter, r *http.Request) {
 	}
 	var hostIP string
 	for _, s := range *c.hosts {
-		if strings.EqualFold(req.ID, s.Name) {
+		if strings.EqualFold(req.Host, s.Name) {
 			hostIP = s.IP
 			break
 		}

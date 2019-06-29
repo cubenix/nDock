@@ -95,7 +95,7 @@
                         </span>
                         <span class="text">Start</span>
                       </a>
-                      <a href="" class="btn btn-sm btn-warning btn-icon-split">
+                      <a href="" class="btn btn-sm btn-warning btn-icon-split" id="{{.Name}}-stop">
                         <span class="icon text-white-50">
                           <i class="fas fa-exclamation-triangle"></i>
                         </span>
@@ -118,6 +118,22 @@
               e.preventDefault();
               $.ajax({
                 url: '/container/start',
+                type: 'POST',
+                data: JSON.stringify({ host: '{{$selectedHost}}', id: '{{.ID}}' }),
+                contentType: "application/json; charset=utf-8",
+                success: function (res) {
+                  console.log(res)
+                },
+                error: function(res) {
+                  console.log(res);
+                }
+              });
+            });
+
+            $("#{{.Name}}-stop").click(function(e){
+              e.preventDefault();
+              $.ajax({
+                url: '/container/stop',
                 type: 'POST',
                 data: JSON.stringify({ host: '{{$selectedHost}}', id: '{{.ID}}' }),
                 contentType: "application/json; charset=utf-8",
