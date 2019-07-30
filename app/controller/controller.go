@@ -4,7 +4,6 @@ import (
 	"html/template"
 	"net/http"
 
-	"github.com/gauravgahlot/dockerdoodle/client/rpc"
 	"github.com/gauravgahlot/dockerdoodle/pkg/types"
 )
 
@@ -15,21 +14,18 @@ var (
 )
 
 // Startup registers all the HTTP request handlers
-func Startup(templates map[string]*template.Template, client *rpc.Client, hosts *[]types.Host) {
+func Startup(templates map[string]*template.Template, hosts *[]types.Host) {
 	homeController.homeTemplate = templates["home.html"]
 	homeController.hosts = hosts
-	homeController.client = client.DockerServiceClient
 	homeController.registerRoutes()
 
 	hostController.hostTemplate = templates["host.html"]
 	hostController.hostContainerTemplate = templates["host-containers.html"]
 	hostController.hosts = hosts
-	hostController.client = client.DockerServiceClient
 	hostController.registerRoutes()
 
 	containerController.containerTemplate = templates["container.html"]
 	containerController.hosts = hosts
-	containerController.client = client.ContainerServiceClient
 	containerController.registerRoutes()
 
 	http.Handle("/js/", http.FileServer(http.Dir("client/public")))

@@ -24,7 +24,7 @@ var (
 )
 
 // GetContainersCount returns the number of containers running on a host
-func GetContainersCount(host string, all bool) (int32, error) {
+func GetContainersCount(host string, all bool) (int, error) {
 	cli, err := client.NewClientWithOpts(client.WithHost(constants.DockerAPIProtocol+host+constants.DockerAPIPort), client.WithVersion(constants.DockerAPIVersion))
 	if err != nil {
 		log.Fatal(err)
@@ -36,7 +36,7 @@ func GetContainersCount(host string, all bool) (int32, error) {
 		log.Fatal(err)
 		return -1, err
 	}
-	return int32(len(*c)), nil
+	return len(*c), nil
 }
 
 // GetContainers returns containers running on a host
