@@ -8,8 +8,8 @@ import (
 	"net/http"
 
 	"github.com/gauravgahlot/dockerdoodle/app/svc"
-	"github.com/gauravgahlot/dockerdoodle/client/viewmodels"
-	vm "github.com/gauravgahlot/dockerdoodle/client/viewmodels"
+	"github.com/gauravgahlot/dockerdoodle/app/viewmodels"
+	vm "github.com/gauravgahlot/dockerdoodle/app/viewmodels"
 	"github.com/gauravgahlot/dockerdoodle/pkg/constants"
 	cnv "github.com/gauravgahlot/dockerdoodle/pkg/converters"
 	"github.com/gauravgahlot/dockerdoodle/pkg/types"

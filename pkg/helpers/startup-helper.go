@@ -14,7 +14,7 @@ import (
 // PopulateTemplates populatest the available templates
 func PopulateTemplates() map[string]*template.Template {
 	result := make(map[string]*template.Template)
-	const basePath = "client/templates"
+	const basePath = "app/templates"
 	layout := template.Must(template.ParseFiles(basePath + "/_layout.html"))
 	template.Must(layout.ParseFiles(basePath+"/_header.html", basePath+"/_footer.html"))
 	dir, err := os.Open(basePath + "/content")
