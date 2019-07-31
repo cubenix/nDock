@@ -5,6 +5,8 @@ import (
 	"log"
 
 	api "github.com/gauravgahlot/dockerdoodle/app/api-wrapper"
+	vm "github.com/gauravgahlot/dockerdoodle/app/viewmodels"
+	cnv "github.com/gauravgahlot/dockerdoodle/pkg/converters"
 	"github.com/gauravgahlot/dockerdoodle/pkg/types"
 )
 
@@ -27,3 +29,49 @@ func GetContainersCount(ctx context.Context, hosts *[]types.Host, all bool) (*ma
 	}
 	return &res, nil
 }
+
+// GetContainers returns a pointer to collection of container view model
+func GetContainers(ctx context.Context, host string, stats bool) (*[]vm.Container, *[]vm.Container, error) {
+	res, err := api.GetContainers(ctx, host, false, true)
+	var containers []vm.Container
+	if err != nil {
+		log.Fatal(err)
+		return nil, &containers, err
+	}
+	all, running, _ := cnv.ToContainersViewModelAndGetStatsRequest(res, host)
+	// if stats {
+	// 	go streamStats(ctx, c, req)
+	// }
+	return all, running, nil
+}
+
+// func streamStats(ctx context.Context, host string, ids map[string]int32) {
+// 	type streamData struct {
+// 		Index int32   `json:"index"`
+// 		Usage float32 `json:"usage"`
+// 	}
+
+// 	stream, err := api.GetStats(ctx, req)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	for {
+// 		res, err := stream.Recv()
+// 		if err == io.EOF {
+// 			return
+// 		} else if err != nil {
+// 			log.Fatal("received ERROR: ", err)
+// 			return
+// 		}
+
+// 		var data streamData
+// 		for i, d := range res.Stats {
+// 			data.Index = i
+// 			data.Usage = d
+// 		}
+
+// 		if data, er := json.Marshal(data); er == nil {
+// 			Hub.Broadcast <- data
+// 		}
+// 	}
+// }

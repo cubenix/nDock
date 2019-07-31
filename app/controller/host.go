@@ -7,8 +7,9 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/gauravgahlot/dockerdoodle/app/svc"
+	"github.com/gauravgahlot/dockerdoodle/app/viewmodels"
 	"github.com/gauravgahlot/dockerdoodle/client/helpers"
-	"github.com/gauravgahlot/dockerdoodle/client/viewmodels"
 	"github.com/gauravgahlot/dockerdoodle/client/ws"
 	"github.com/gauravgahlot/dockerdoodle/pkg/types"
 )
@@ -40,7 +41,7 @@ func (h host) handleHosts(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	all, running, err := helpers.GetContainers(context.Background(), hostIP, true)
+	all, running, err := svc.GetContainers(context.Background(), hostIP, true)
 	if err != nil {
 		log.Fatal(err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -68,7 +69,7 @@ func (h host) handleHostContainers(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	all, _, err := helpers.GetContainers(context.Background(), h.client, hostIP, false)
+	all, _, err := svc.GetContainers(context.Background(), hostIP, false)
 	if err != nil {
 		log.Fatal(err)
 		w.WriteHeader(http.StatusInternalServerError)
