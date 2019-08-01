@@ -1,20 +1,20 @@
 package converters
 
 import (
-	dt "github.com/docker/docker/api/types"
-	vm "github.com/gauravgahlot/dockerdoodle/app/viewmodels"
+	vm "github.com/gauravgahlot/dockerdoodle/client/viewmodels"
 	"github.com/gauravgahlot/dockerdoodle/pkg/constants"
+	"github.com/gauravgahlot/dockerdoodle/pkg/pb"
 	"github.com/gauravgahlot/dockerdoodle/pkg/types"
 )
 
 // ToHostsViewModel returns a collection of Host view model
-func ToHostsViewModel(r map[string]int, hosts []types.Host) *[]vm.Host {
+func ToHostsViewModel(r *pb.GetContainersCountResponse, hosts []types.Host) *[]vm.Host {
 	res := []vm.Host{}
-	for _, host := range hosts {
+	for i, host := range hosts {
 		h := vm.Host{
 			Name:           host.Name,
 			IP:             host.IP,
-			ContainerCount: int(r[host.IP]),
+			ContainerCount: int(r.HostContainers[i].Containers[host.IP]),
 		}
 		res = append(res, h)
 	}
@@ -22,13 +22,13 @@ func ToHostsViewModel(r map[string]int, hosts []types.Host) *[]vm.Host {
 }
 
 // ToContainersViewModelAndGetStatsRequest returns pointers to collection of Container view model and GetStatsRequest
-func ToContainersViewModelAndGetStatsRequest(res *[]dt.Container, host string) (*[]vm.Container, *[]vm.Container, *map[string]int32) {
+func ToContainersViewModelAndGetStatsRequest(r *pb.GetContainersResponse, host string) (*[]vm.Container, *[]vm.Container, *pb.GetStatsRequest) {
 	all := []vm.Container{}
 	running := []vm.Container{}
-	req := map[string]int32{}
+	req := pb.GetStatsRequest{Host: host, Containers: map[string]int32{}}
 
-	for i, c := range *res {
-		ct := ToContainerViewModel(&c)
+	for i, c := range r.Containers {
+		ct := ToContainerViewModel(c)
 		ct.ColorCode = constants.BGCodes[i]
 		all = append(all, *ct)
 
@@ -38,16 +38,16 @@ func ToContainersViewModelAndGetStatsRequest(res *[]dt.Container, host string) (
 	}
 
 	for i, c := range running {
-		req[c.ID] = int32(i)
+		req.Containers[c.ID] = int32(i)
 	}
 	return &all, &running, &req
 }
 
 // ToContainerViewModel returns a struct of Container view model
-func ToContainerViewModel(c *dt.Container) *vm.Container {
+func ToContainerViewModel(c *pb.Container) *vm.Container {
 	return &vm.Container{
-		ID:      c.ID,
-		Name:    c.Names[0][1:],
+		ID:      c.Id,
+		Name:    c.Name,
 		Image:   c.Image,
 		Command: c.Command,
 		Created: c.Created,
@@ -58,24 +58,24 @@ func ToContainerViewModel(c *dt.Container) *vm.Container {
 	}
 }
 
-func getPorts(ports []dt.Port) *[]vm.Port {
+func getPorts(ports []*pb.Port) *[]vm.Port {
 	ps := []vm.Port{}
 	for _, p := range ports {
 		ps = append(ps, vm.Port{
 			IP:          p.IP,
 			Type:        p.Type,
-			PrivatePort: int32(p.PrivatePort),
-			PublicPort:  int32(p.PublicPort),
+			PrivatePort: p.PrivatePort,
+			PublicPort:  p.PublicPort,
 		})
 	}
 	return &ps
 }
 
-func getMounts(mounts []dt.MountPoint) *[]vm.Mount {
+func getMounts(mounts []*pb.MountPoint) *[]vm.Mount {
 	ms := []vm.Mount{}
 	for _, m := range mounts {
 		ms = append(ms, vm.Mount{
-			Type:        string(m.Type),
+			Type:        m.Type,
 			Name:        m.Name,
 			Source:      m.Source,
 			Destination: m.Destination,

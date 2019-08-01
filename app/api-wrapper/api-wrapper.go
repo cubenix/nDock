@@ -98,6 +98,7 @@ func getStats(ctx context.Context, cli *client.Client, id string, cIndex int32) 
 	m := map[int32]float32{
 		cIndex: cpuUsage(&st),
 	}
+	log.Println("WRAPPER: ", m)
 	StatsCh <- m
 }
 

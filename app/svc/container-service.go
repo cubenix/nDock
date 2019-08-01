@@ -2,22 +2,29 @@ package svc
 
 import (
 	"context"
+	"errors"
 	"log"
+	"strings"
 
+	api "github.com/gauravgahlot/dockerdoodle/app/api-wrapper"
 	vm "github.com/gauravgahlot/dockerdoodle/app/viewmodels"
 	convert "github.com/gauravgahlot/dockerdoodle/pkg/converters"
-	"github.com/gauravgahlot/dockerdoodle/pkg/pb"
-	api "github.com/gauravgahlot/dockerdoodle/app/api-wrapper"
 )
 
 // GetContainer get container details for a container ID
 func GetContainer(ctx context.Context, host string, id string) (*vm.Container, error) {
-	err := c.GetContainer(ctx, &pb.GetContainerRequest{ID: id, Host: host})
+	containers, err := api.GetContainers(ctx, host, true, true)
 	if err != nil {
 		log.Fatal(err)
 		return nil, err
 	}
-	return convert.ToContainerViewModel(res.Container), nil
+
+	for _, c := range *containers {
+		if strings.EqualFold(c.ID, id) {
+			return convert.ToContainerViewModel(&c), nil
+		}
+	}
+	return nil, errors.New("No container found with ID: " + id)
 }
 
 // StartContainer starts a stopped or created container, if there is no error
