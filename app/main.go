@@ -12,8 +12,7 @@ import (
 )
 
 var (
-	useLocal       = flag.Bool("L", false, "use localhost as the only Docker Host")
-	serverEndpoint = flag.String("s", constants.LocalIP, "endpoint of the GRPC server")
+	useLocal = flag.Bool("L", false, "use localhost as the only Docker Host")
 )
 
 func main() {

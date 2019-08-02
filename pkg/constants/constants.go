@@ -1,6 +1,6 @@
 package constants
 
-// Host ports and network for web client and GRPC server
+// Application port and Docker host network connection type
 const (
 	ApplicationPort = ":7585"
 	ServerNetwork   = "tcp"

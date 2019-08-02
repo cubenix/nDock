@@ -60,8 +60,6 @@ func streamStats(ctx context.Context, host string, req *map[string]int32) {
 		if data.Index == -1 {
 			break
 		}
-
-		log.Println("Data: ", data)
 		if data, er := json.Marshal(data); er == nil {
 			Hub.Broadcast <- data
 		}
