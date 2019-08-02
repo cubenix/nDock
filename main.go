@@ -7,7 +7,7 @@ import (
 
 	"github.com/gauravgahlot/dockerdoodle/app/controller"
 	"github.com/gauravgahlot/dockerdoodle/pkg/constants"
-	"github.com/gauravgahlot/dockerdoodle/pkg/helpers"
+	"github.com/gauravgahlot/dockerdoodle/pkg/svc"
 	"github.com/gauravgahlot/dockerdoodle/pkg/types"
 )
 
@@ -17,13 +17,13 @@ var (
 
 func main() {
 	flag.Parse()
-	templates := helpers.PopulateTemplates()
+	templates := svc.PopulateTemplates()
 
 	var config *types.Config
 	if *useLocal {
-		config = helpers.ConfigForLocalEnv()
+		config = svc.ConfigForLocalEnv()
 	} else {
-		config = helpers.ReadConfiguration()
+		config = svc.ReadConfiguration()
 	}
 
 	controller.Startup(templates, &config.Hosts)

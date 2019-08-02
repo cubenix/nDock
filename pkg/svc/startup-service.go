@@ -1,4 +1,4 @@
-package helpers
+package svc
 
 import (
 	"encoding/json"

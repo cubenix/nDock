@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"log"
 
-	api "github.com/gauravgahlot/dockerdoodle/app/api-wrapper"
 	vm "github.com/gauravgahlot/dockerdoodle/app/viewmodels"
 	"github.com/gauravgahlot/dockerdoodle/app/ws"
+	"github.com/gauravgahlot/dockerdoodle/pkg/api"
 	cnv "github.com/gauravgahlot/dockerdoodle/pkg/converters"
 	"github.com/gauravgahlot/dockerdoodle/pkg/types"
 )

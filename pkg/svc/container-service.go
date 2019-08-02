@@ -6,8 +6,8 @@ import (
 	"log"
 	"strings"
 
-	api "github.com/gauravgahlot/dockerdoodle/app/api-wrapper"
 	vm "github.com/gauravgahlot/dockerdoodle/app/viewmodels"
+	"github.com/gauravgahlot/dockerdoodle/pkg/api"
 	convert "github.com/gauravgahlot/dockerdoodle/pkg/converters"
 )
 

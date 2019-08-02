@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/gauravgahlot/dockerdoodle/app/svc"
 	"github.com/gauravgahlot/dockerdoodle/app/viewmodels"
 	"github.com/gauravgahlot/dockerdoodle/app/ws"
+	"github.com/gauravgahlot/dockerdoodle/pkg/svc"
 	"github.com/gauravgahlot/dockerdoodle/pkg/types"
 )
 

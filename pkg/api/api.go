@@ -1,4 +1,4 @@
-package apiwrapper
+package api
 
 import (
 	"context"

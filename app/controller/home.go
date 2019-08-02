@@ -7,11 +7,11 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/gauravgahlot/dockerdoodle/app/svc"
 	"github.com/gauravgahlot/dockerdoodle/app/viewmodels"
 	vm "github.com/gauravgahlot/dockerdoodle/app/viewmodels"
 	"github.com/gauravgahlot/dockerdoodle/pkg/constants"
 	cnv "github.com/gauravgahlot/dockerdoodle/pkg/converters"
+	"github.com/gauravgahlot/dockerdoodle/pkg/svc"
 	"github.com/gauravgahlot/dockerdoodle/pkg/types"
 )
 
