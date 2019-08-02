@@ -45,53 +45,25 @@ func GetContainers(ctx context.Context, host string, stats bool) (*[]vm.Containe
 	}
 	all, running, req := cnv.ToContainersViewModelAndGetStatsRequest(res, host)
 	if stats {
+		api.DoneSignalSent = false
 		go streamStats(ctx, host, req)
 	}
 	return all, running, nil
 }
 
 func streamStats(ctx context.Context, host string, req *map[string]int32) {
-	type streamData struct {
-		Index int32   `json:"index"`
-		Usage float32 `json:"usage"`
-	}
-
 	for cID, cIndex := range *req {
 		go api.GetDockerStats(ctx, host, cID, cIndex)
 	}
 
 	for data := range api.StatsCh {
-		if _, ok := data[-1]; ok {
+		if data.Index == -1 {
 			break
 		}
-		// stream.Send(&pb.GetStatsReponse{Stats: data})
+
 		log.Println("Data: ", data)
 		if data, er := json.Marshal(data); er == nil {
 			Hub.Broadcast <- data
 		}
 	}
-
-	// stream, err := api.GetDockerStats(ctx, host)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	// for {
-	// 	res, err := stream.Recv()
-	// 	if err == io.EOF {
-	// 		return
-	// 	} else if err != nil {
-	// 		log.Fatal("received ERROR: ", err)
-	// 		return
-	// 	}
-
-	// 	var data streamData
-	// 	for i, d := range res.Stats {
-	// 		data.Index = i
-	// 		data.Usage = d
-	// 	}
-
-	// 	if data, er := json.Marshal(data); er == nil {
-	// 		Hub.Broadcast <- data
-	// 	}
-	// }
 }

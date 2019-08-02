@@ -12,12 +12,18 @@ import (
 	"github.com/gauravgahlot/dockerdoodle/pkg/constants"
 )
 
+// StatsData represents the stats of a container
+type StatsData struct {
+	Index int32   `json:"index"`
+	Usage float32 `json:"usage"`
+}
+
 var (
 	// DoneCh is used to send a DONE signal
 	DoneCh = make(chan struct{})
 
 	// StatsCh holds the container stats
-	StatsCh = make(chan map[int32]float32)
+	StatsCh = make(chan StatsData)
 
 	// DoneSignalSent some signal
 	DoneSignalSent = true
@@ -71,10 +77,8 @@ func GetDockerStats(ctx context.Context, host string, id string, cIndex int32) {
 		select {
 		case <-DoneCh:
 			DoneSignalSent = true
-			m := map[int32]float32{
-				-1: 0.0,
-			}
-			StatsCh <- m
+			sd := StatsData{Index: -1, Usage: 0.0}
+			StatsCh <- sd
 			return
 		default:
 			if !DoneSignalSent {
@@ -95,11 +99,8 @@ func getStats(ctx context.Context, cli *client.Client, id string, cIndex int32) 
 	var st types.Stats
 	json.Unmarshal(d, &st)
 
-	m := map[int32]float32{
-		cIndex: cpuUsage(&st),
-	}
-	log.Println("WRAPPER: ", m)
-	StatsCh <- m
+	sd := StatsData{Index: cIndex, Usage: cpuUsage(&st)}
+	StatsCh <- sd
 }
 
 func cpuUsage(stats *types.Stats) float32 {

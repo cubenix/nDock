@@ -9,8 +9,7 @@ import (
 
 	"github.com/gauravgahlot/dockerdoodle/app/svc"
 	"github.com/gauravgahlot/dockerdoodle/app/viewmodels"
-	"github.com/gauravgahlot/dockerdoodle/client/helpers"
-	"github.com/gauravgahlot/dockerdoodle/client/ws"
+	"github.com/gauravgahlot/dockerdoodle/app/ws"
 	"github.com/gauravgahlot/dockerdoodle/pkg/types"
 )
 
@@ -85,5 +84,5 @@ func wsEndpoint(w http.ResponseWriter, r *http.Request) {
 	hub := ws.NewHub()
 	go hub.Run()
 	ws.ServeWs(hub, w, r)
-	helpers.Hub = hub
+	svc.Hub = hub
 }
