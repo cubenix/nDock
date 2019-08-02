@@ -7,10 +7,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/gauravgahlot/dockerdoodle/client/helpers"
-	"github.com/gauravgahlot/dockerdoodle/client/rpc"
-	"github.com/gauravgahlot/dockerdoodle/client/viewmodels"
-	"github.com/gauravgahlot/dockerdoodle/client/ws"
+	"github.com/gauravgahlot/dockerdoodle/app/viewmodels"
+	"github.com/gauravgahlot/dockerdoodle/app/ws"
+	"github.com/gauravgahlot/dockerdoodle/pkg/svc"
 	"github.com/gauravgahlot/dockerdoodle/pkg/types"
 )
 
@@ -18,7 +17,6 @@ type host struct {
 	hostTemplate          *template.Template
 	hostContainerTemplate *template.Template
 	hosts                 *[]types.Host
-	client                rpc.DockerServiceClient
 }
 
 func (h host) registerRoutes() {
@@ -42,7 +40,7 @@ func (h host) handleHosts(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	all, running, err := helpers.GetContainers(context.Background(), h.client, hostIP, true)
+	all, running, err := svc.GetContainers(context.Background(), hostIP, true)
 	if err != nil {
 		log.Fatal(err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -70,7 +68,7 @@ func (h host) handleHostContainers(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	all, _, err := helpers.GetContainers(context.Background(), h.client, hostIP, false)
+	all, _, err := svc.GetContainers(context.Background(), hostIP, false)
 	if err != nil {
 		log.Fatal(err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -86,5 +84,5 @@ func wsEndpoint(w http.ResponseWriter, r *http.Request) {
 	hub := ws.NewHub()
 	go hub.Run()
 	ws.ServeWs(hub, w, r)
-	helpers.Hub = hub
+	svc.Hub = hub
 }

@@ -1,57 +1,20 @@
-package main
+package svc
 
 import (
-	"flag"
+	"encoding/json"
 	"html/template"
 	"io/ioutil"
 	"log"
-	"net/http"
 	"os"
 
-	"github.com/gauravgahlot/dockerdoodle/client/controller"
-	"github.com/gauravgahlot/dockerdoodle/client/helpers"
-	"github.com/gauravgahlot/dockerdoodle/client/rpc"
 	"github.com/gauravgahlot/dockerdoodle/pkg/constants"
 	"github.com/gauravgahlot/dockerdoodle/pkg/types"
-
-	"google.golang.org/grpc"
 )
 
-var (
-	useLocal       = flag.Bool("L", false, "use localhost as the only Docker Host")
-	serverEndpoint = flag.String("s", constants.LocalIP, "endpoint of the GRPC server")
-)
-
-func main() {
-	flag.Parse()
-
-	conn, err := grpc.Dial(*serverEndpoint+constants.ServerPort, grpc.WithInsecure())
-	defer conn.Close()
-	if err != nil {
-		panic(err.Error())
-	}
-
-	clients := rpc.InitializeClients(conn)
-	templates := populateTemplates()
-
-	var config *types.Config
-	if *useLocal {
-		config = configForLocalEnv()
-	} else {
-		config = readConfiguration()
-	}
-
-	controller.Startup(templates, clients, &config.Hosts)
-	server := http.Server{
-		Addr: constants.ClientPort,
-	}
-	log.Println("Client App listening at port", constants.ClientPort)
-	log.Fatal(server.ListenAndServe())
-}
-
-func populateTemplates() map[string]*template.Template {
+// PopulateTemplates populatest the available templates
+func PopulateTemplates() map[string]*template.Template {
 	result := make(map[string]*template.Template)
-	const basePath = "client/templates"
+	const basePath = "app/templates"
 	layout := template.Must(template.ParseFiles(basePath + "/_layout.html"))
 	template.Must(layout.ParseFiles(basePath+"/_header.html", basePath+"/_footer.html"))
 	dir, err := os.Open(basePath + "/content")
@@ -82,20 +45,38 @@ func populateTemplates() map[string]*template.Template {
 	return result
 }
 
-func readConfiguration() *types.Config {
-	var reader helpers.ConfigReader = helpers.JSONConfigReader{}
-	conf, err := reader.ReadConfig()
+// ReadConfiguration reads the configuration from JSON config file
+func ReadConfiguration() *types.Config {
+	conf, err := readJSONConfig()
 	if err != nil {
 		log.Panic("Failed to read the configuration")
 	}
 	return &conf
 }
 
-func configForLocalEnv() *types.Config {
+// ConfigForLocalEnv sets the localhost as the only Docker Host
+func ConfigForLocalEnv() *types.Config {
 	host, _ := os.Hostname()
 	return &types.Config{
 		Hosts: []types.Host{
 			types.Host{Name: host, IP: constants.LocalIP},
 		},
 	}
+}
+
+func readJSONConfig() (types.Config, error) {
+	var config types.Config
+
+	data, err := ioutil.ReadFile("config.json")
+	if err != nil {
+		log.Fatalln(err)
+		return config, err
+	}
+
+	jsonErr := json.Unmarshal(data, &config)
+	if jsonErr != nil {
+		log.Fatalln("Invalid JSON file:", err)
+		return config, err
+	}
+	return config, nil
 }

@@ -1,10 +1,9 @@
 package constants
 
-// Host ports and network for web client and GRPC server
+// Application port and Docker host network connection type
 const (
-	ClientPort    = ":7585"
-	ServerPort    = ":7584"
-	ServerNetwork = "tcp"
+	ApplicationPort = ":7585"
+	ServerNetwork   = "tcp"
 )
 
 // LocalIP is the IP address of the localhost

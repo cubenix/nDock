@@ -8,16 +8,14 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/gauravgahlot/dockerdoodle/client/helpers"
-	"github.com/gauravgahlot/dockerdoodle/client/rpc"
-	vm "github.com/gauravgahlot/dockerdoodle/client/viewmodels"
+	vm "github.com/gauravgahlot/dockerdoodle/app/viewmodels"
+	"github.com/gauravgahlot/dockerdoodle/pkg/svc"
 	"github.com/gauravgahlot/dockerdoodle/pkg/types"
 )
 
 type container struct {
 	hosts             *[]types.Host
 	containerTemplate *template.Template
-	client            rpc.ContainerServiceClient
 }
 
 func (c container) registerRoutes() {
@@ -40,7 +38,7 @@ func (c container) startContainer(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 	}
-	err := helpers.StartContainer(context.Background(), c.client, hostIP, req.ID)
+	err := svc.StartContainer(context.Background(), hostIP, req.ID)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -60,7 +58,7 @@ func (c container) stopContainer(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 	}
-	err := helpers.StopContainer(context.Background(), c.client, hostIP, req.ID)
+	err := svc.StopContainer(context.Background(), hostIP, req.ID)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -80,7 +78,7 @@ func (c container) removeContainer(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 	}
-	err := helpers.RemoveContainer(context.Background(), c.client, hostIP, req.ID)
+	err := svc.RemoveContainer(context.Background(), hostIP, req.ID)
 	if err != nil {
 		log.Fatal(err)
 	}

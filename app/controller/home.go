@@ -1,22 +1,22 @@
 package controller
 
 import (
+	"context"
 	"encoding/json"
 	"html/template"
 	"log"
 	"net/http"
 
-	"github.com/gauravgahlot/dockerdoodle/client/helpers"
-	"github.com/gauravgahlot/dockerdoodle/client/rpc"
-	"github.com/gauravgahlot/dockerdoodle/client/viewmodels"
-	vm "github.com/gauravgahlot/dockerdoodle/client/viewmodels"
+	"github.com/gauravgahlot/dockerdoodle/app/viewmodels"
+	vm "github.com/gauravgahlot/dockerdoodle/app/viewmodels"
 	"github.com/gauravgahlot/dockerdoodle/pkg/constants"
+	cnv "github.com/gauravgahlot/dockerdoodle/pkg/converters"
+	"github.com/gauravgahlot/dockerdoodle/pkg/svc"
 	"github.com/gauravgahlot/dockerdoodle/pkg/types"
 )
 
 type home struct {
 	homeTemplate *template.Template
-	client       rpc.DockerServiceClient
 	hosts        *[]types.Host
 }
 
@@ -53,13 +53,13 @@ func (h home) handleContainersCount(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 	}
 
-	res, err := helpers.GetContainersCount(h.client, h.hosts, data.All)
+	res, err := svc.GetContainersCount(context.Background(), h.hosts, data.All)
 	if err != nil {
 		log.Fatal(err)
 		w.WriteHeader(http.StatusInternalServerError)
 	}
 
-	encErr := json.NewEncoder(w).Encode(vm.Home{Hosts: *res})
+	encErr := json.NewEncoder(w).Encode(vm.Home{Hosts: *cnv.ToHostsViewModel(*res, *h.hosts)})
 	if encErr != nil {
 		log.Fatal("Error sending data: ", encErr)
 		w.WriteHeader(http.StatusInternalServerError)
